@@ -1,0 +1,209 @@
+<link rel="import" href="../polymer/polymer-element.html">
+<link rel="import" href="../polymer/lib/mixins/gesture-event-listeners.html">
+
+<dom-module id="exmg-sortable">
+  <template>
+    <style>
+      :host {
+        position: relative;
+        display: block;
+      }
+    </style>
+    <slot></slot>
+  </template>
+
+  <script>
+    /**
+     * Enables drag and drop sorting of items in a list, table or any other set of elements as selected by the
+     * selector property.
+     * TODO: more docs and comments, add settings like orientation locking, animation settings, ...
+     *
+     * @customElement
+     * @polymer
+     * @demo demo/index.html
+     */
+    class ExmgSortable extends Polymer.GestureEventListeners(Polymer.Element) {
+      static get is() { return 'exmg-sortable'; }
+      static get properties() {
+        return {
+          items: {
+            type: Array,
+            notify: true
+          },
+          selector: {
+            type: String
+          }
+        };
+      }
+
+      _handleTrack(e) {
+        switch(e.detail.state) {
+          case 'start':
+            // note: trackstart fires on the first move following the touchstart/mousedown!
+            this.trackStart(e);
+            break;
+          case 'track':
+            this.trackMove(e);
+            break;
+          case 'end':
+            this.trackEnd(e);
+            break;
+        }
+      }
+
+      hitTest(node, targets) {
+        // fast and simple hit test: check whether center of node intersects with rect of targets
+        let { left, top, width, height } = node.getBoundingClientRect();
+        let x = left + (width / 2);
+        let y = top + (height / 2);
+
+        return targets.filter(item => {
+          let { left, right, top, bottom } = item.getBoundingClientRect();
+          return ! (x < left || x > right || y < top || y > bottom);
+        });
+      }
+
+      createClone(node) {
+        let clone = node.cloneNode(true);
+        let { offsetLeft: x, offsetTop: y } = node;
+
+        // Add clone styles on the style object directly. The ::slotted() selector can't universally target it,
+        // since the clone may be multiple shadow dom levels deep.
+        Object.assign(clone.style, {
+          position: 'absolute',
+          left: `${x}px`,
+          top: `${y}px`
+        });
+
+        // tag as "clone" for 3rd party styling. TODO: naming
+        clone.classList.add('clone');
+
+        // append and return
+        return node.parentNode.appendChild(clone);
+      }
+
+      trackStart(e) {
+        let node = e.target.closest(this.selector);
+        if (node) {
+          this.current = node;
+          this.nodes = Array.from(this.querySelectorAll(this.selector));
+          this.clone = this.createClone(node);
+          this.animating = [];
+
+          // tag as "current" for 3rd party styling. TODO: naming
+          node.classList.add('current');
+        }
+      }
+
+      trackMove(e) {
+        if (!this.current) {
+          return;
+        }
+
+        // clone was inserted on top of current via left/top: dx/dy is literally its new position \o/
+        let { dx, dy } = e.detail;
+        Object.assign(this.clone.style, {
+          transform: `translate3d(${dx}px, ${dy}px, 0)`
+        });
+
+        let target = this.hitTest(this.clone, this.nodes)[0];
+        if (
+            // if clone intersects with a valid target,
+            target &&
+            // other than its own origin,
+            (target !== this.current) &&
+            // and the target isn't currently animating (off position, flickering: race condition),
+            (this.animating.indexOf(target) < 0)
+        ) {
+          // then insert it before or after the target it's intersecting with.
+          this.insertAtTarget(this.current, target);
+        }
+      }
+
+      insertAtTarget(node, target) {
+        // get positions before moving nodes around to determine distances to animate post-move
+        let offsets = this.nodes.map(item => ({
+          x: item.offsetLeft,
+          y: item.offsetTop
+        }));
+
+        // insert before or after: depends on whether node precedes or follows target
+        let insert = (node.compareDocumentPosition(target) & 4) ? target.nextSibling : target;
+        node.parentNode.insertBefore(node, insert);
+
+        // compare old and new offset positions for animation distances
+        this.nodes.forEach((node, i) => {
+          let { x, y } = offsets[i];
+          let dx = x - node.offsetLeft;
+          let dy = y - node.offsetTop;
+          if (dx !== 0 || dy !== 0) {
+            this.animateNode(node, dx, dy);
+          }
+        });
+      }
+
+      animateNode(node, dx, dy, timing = { duration: 200, easing: 'ease-out' }) {
+        // keep a stack of currently animating nodes to exclude as drag & drop targets.
+        let anims = this.animating;
+        anims.push(node);
+
+        // animate from dx/dy (old node position) to none (new node position)
+        node.animate([
+          { transform: `translate3d(${dx}px, ${dy}px, 0)` },
+          { transform: 'none' }
+        ], timing).addEventListener('finish', e => {
+          let index = anims.indexOf(node);
+          if (index > -1) {
+            // splice out when done to unlock as a valid target
+            anims.splice(index, 1);
+          }
+        });
+      }
+
+      trackEnd(e) {
+        let { current, clone, nodes, items } = this;
+
+        let updated = Array.from(this.querySelectorAll(this.selector));
+        let originalIndex = nodes.indexOf(current);
+        let updatedIndex = updated.indexOf(current);
+
+        if (clone) {
+          clone.parentNode.removeChild(clone);
+          delete this.clone;
+        }
+
+        if (current) {
+          current.classList.remove('current');
+          delete this.current;
+        }
+
+        /**
+        * Update new order to items property. Can't use this.splice or this.notifySplices, because dom-repeat seems
+        * to bind data to nodes on a simple index. Notify would then cause the renderer to apply sorting a second
+        * time, rather than realizing that dom order already reflects data order. Clearing the data and re-inserting
+        * it beforeNextRender seems a viable workaround.
+        */
+
+        this.items = [];
+
+        Polymer.RenderStatus.beforeNextRender(this, () => {
+          items.splice(updatedIndex, 0, items.splice(originalIndex, 1)[0]);
+          this.items = items;
+        });
+      }
+
+      connectedCallback() {
+        super.connectedCallback();
+        this.trackListener = e => this._handleTrack(e);
+        Polymer.Gestures.addListener(this, 'track', this.trackListener);
+      }
+
+      disconnectedCallback() {
+        super.disconnectedCallback();
+        Polymer.Gestures.removeListener(this, 'track', this.trackListener);
+      }
+    }
+
+    window.customElements.define(ExmgSortable.is, ExmgSortable);
+  </script>
+</dom-module>
