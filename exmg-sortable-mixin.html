@@ -1,0 +1,343 @@
+<link rel="import" href="../polymer/lib/utils/gestures.html">
+<link rel="import" href="../polymer/lib/utils/mixin.html">
+<script>
+'use strict';
+{
+
+  /**
+   * @namespace Exmg
+   */
+  window.Exmg = window.Exmg || {};
+
+  /**
+   * Element class mixin that enables drag and drop sorting of nodes in a list, table or any other set of
+   * elements as selected by the selector property. The items property must be the array of data that represents
+   * these nodes.
+   *
+   * The host element MUST define a CSS `position` value other than `static`, preferably `relative`. This ensures that
+   * the dragged element can be properly positioned within it. A block-like `display` value is advised as well.
+   *
+   * @polymer
+   * @mixinFunction
+   * @demo demo/index.html
+   */
+  Exmg.SortableMixin = Polymer.dedupingMixin(superClass => {
+
+    /**
+     * @polymer
+     * @memberof Exmg
+     * @mixinClass
+     */
+    return class SortableMixin extends superClass {
+
+      constructor() {
+        super();
+        this._trackListener = e => this._handleTrack(e);
+      }
+
+      static get properties() {
+        return {
+          /**
+           * Animation timing options
+           * @type {{ duration: number, easing: string }}
+           */
+          animationTiming: {
+            type: Object,
+            value: { duration: 200, easing: 'ease-out' }
+          },
+
+          // CSS class for the dragged node's clone
+          cloneClass: {
+            type: String,
+            value: 'clone'
+          },
+
+          // CSS class for the node that is being dragged
+          draggedClass: {
+            type: String,
+            value: 'dragged'
+          },
+
+          // Toggle to enable / disable sorting
+          draggingDisabled: {
+            type: Boolean,
+            value: false,
+            observer: '_disabledChanged'
+          },
+
+          // Optional handle selector to drag items with instead of items themselves.
+          handleSelector: String,
+
+          // Array of items that represents the data of selected nodes
+          items: {
+            type: Array,
+            notify: true
+          },
+
+          // CSS Selector for the nodes that should be draggagle.
+          itemSelector: String,
+
+          // Optionally set to "horizontal" or "vertical" to lock drag orientation.
+          orientation: String
+        };
+      }
+
+      /**
+       * Orientation map to limit dragging to horizontal or vertical.
+       */
+      static get orientationMap() {
+        return {
+          horizontal: { x: 1, y: 0 },
+          vertical: { x: 0, y: 1 }
+        };
+      }
+
+      /**
+       * Toggles the track listener depending on the `draggingDisabled` property.
+       *
+       * @param {Boolean} newValue
+       * @param {Boolean} oldValue
+       */
+      _disabledChanged(value /*, oldValue */) {
+        if (value === false) {
+          Polymer.Gestures.addListener(this, 'track', this._trackListener);
+        } else {
+          Polymer.Gestures.removeListener(this, 'track', this._trackListener);
+        }
+      }
+
+      /**
+       * Tracks a pointer from touchstart/mousedown to touchend/mouseup. Note that the start state is fired following
+       * the first actual move event following a touchstart/mousedown.
+       *
+       * @param {CustomEvent} trackEvent
+       */
+      _handleTrack(e) {
+        switch(e.detail.state) {
+          case 'start':
+            this._trackStart(e);
+            break;
+          case 'track':
+            this._trackMove(e);
+            break;
+          case 'end':
+            this._trackEnd(e);
+            break;
+        }
+      }
+
+      /**
+       * Fast and simple hit test to check whether the center of a node intersects with the rectangle of any of the
+       * given targets. Returns an array of matches.
+       *
+       * @param {Node} node
+       * @param {Array} targets
+       * @return {Array} matches
+       */
+      _hitTest(node, targets) {
+        let { left, top, width, height } = node.getBoundingClientRect();
+        let x = left + (width / 2);
+        let y = top + (height / 2);
+
+        return targets.filter(item => {
+          let { left, right, top, bottom } = item.getBoundingClientRect();
+          return ! (x < left || x > right || y < top || y > bottom);
+        });
+      }
+
+      /**
+       * Clones a given node to visually drag around. The original node is left in the same flow as its siblings. Clone
+       * styles are added onto the style object directly, since the ::slotted() selector can't universally target nodes
+       * that may be nested an unknown amount of shadow dom levels deep.
+       *
+       * @param {Node} node
+       * @return {Node} clone
+       */
+      _createClone(node) {
+        let clone = node.cloneNode(true);
+        let { offsetLeft: x, offsetTop: y } = node;
+
+        Object.assign(clone.style, {
+          position: 'absolute',
+          left: `${x}px`,
+          top: `${y}px`
+        });
+
+        clone.classList.add(this.cloneClass);
+
+        return node.parentNode.appendChild(clone);
+      }
+
+      /**
+       * Initialized a drag and drop sequence if a child node was clicked that matches the itemSelector property. If a
+       * handleSelector is defined, a node matching this selector must be clicked instead.
+       *
+       * @param {CustomEvent} trackEvent
+       */
+      _trackStart(e) {
+        let handle = this.handleSelector;
+        if (handle && !e.target.closest(handle)) {
+          return;
+        }
+
+        let selector = this.itemSelector;
+        let node = e.target.closest(selector);
+        if (node) {
+          e.preventDefault();
+
+          this._current = node;
+          this._nodes = Array.from(this.querySelectorAll(selector));
+          this._clone = this._createClone(node);
+          this._animating = [];
+          this._limiter = SortableMixin.orientationMap[this.orientation];
+
+          node.classList.add(this.draggedClass);
+        }
+      }
+
+      /**
+       * Moves the active node's clone to follow the pointer. The node that the clone intersects with (via hitTest) is
+       * the insert point for updated sorting.
+       *
+       * @param {CustomEvent} trackEvent
+       */
+      _trackMove(e) {
+        let { _current, _clone, _limiter } = this;
+        if (!_current) {
+          return;
+        }
+
+        e.preventDefault();
+
+        let { dx, dy } = e.detail;
+        if (_limiter) {
+          dx = dx * _limiter.x;
+          dy = dy * _limiter.y;
+        }
+
+        Object.assign(_clone.style, {
+          transform: `translate3d(${dx}px, ${dy}px, 0)`
+        });
+
+        let target = this._hitTest(_clone, this._nodes)[0];
+        if (
+            // if clone intersects with a valid target,
+            target &&
+            // other than its own origin,
+            (target !== _current) &&
+            // and the target isn't currently animating, which causes false hit tests,
+            this._isAnimating(target) === false
+        ) {
+          this._insertAtTarget(_current, target);
+        }
+      }
+
+      /**
+       * Inserts node at target to update sibling sorting. If the node precedes the target, it is inserted after it;
+       * If it follows the target, it is inserted before it. This ensures any node can be dragged from the very
+       * beginning to the very end and vice versa. The animateNode function is called for all nodes that moved because
+       * of this dom update.
+       *
+       * @param {Node} node
+       * @param {Node} target
+       */
+      _insertAtTarget(node, target) {
+        let offsets = this._nodes.map(item => ({
+          x: item.offsetLeft,
+          y: item.offsetTop
+        }));
+
+        let insert = (node.compareDocumentPosition(target) & 4) ? target.nextSibling : target;
+        node.parentNode.insertBefore(node, insert);
+
+        this._nodes.forEach((node, i) => {
+          let { x, y } = offsets[i];
+          let dx = x - node.offsetLeft;
+          let dy = y - node.offsetTop;
+          if (dx !== 0 || dy !== 0) {
+            this._animateNode(node, dx, dy);
+          }
+        });
+      }
+
+      /**
+       * Triggers a CSS animation on a node with the given dx and dy. Used following dom updates to make it appear as
+       * if nodes animate from their old to their new position in the dom.
+       *
+       * @param {Node} node
+       * @param {number} dx
+       * @param {number} dy
+       */
+      _animateNode(node, dx, dy) {
+        // keep a stack of currently animating nodes to exclude as drag & drop targets.
+        let anims = this._animating;
+        anims.push(node);
+
+        // animate from dx/dy (old node position) to none (new node position)
+        node.animate([
+          { transform: `translate3d(${dx}px, ${dy}px, 0)` },
+          { transform: 'none' }
+        ], this.animationTiming).addEventListener('finish', e => {
+          let index = anims.indexOf(node);
+          if (index > -1) {
+            // splice out when done to unlock as a valid target
+            anims.splice(index, 1);
+          }
+        });
+      }
+
+      /**
+       * Returns a boolean indicating whether the node is currently in an animation.
+       *
+       * @param {Node} node
+       * @returns {boolean} isAnimating
+       */
+      _isAnimating(node) {
+        return this._animating.indexOf(node) > -1;
+      }
+
+      /**
+       * Ends the drag and drop sequence and updates the new node order to the instance's items for binding and
+       * rendering purposes.
+       *
+       * @param {CustomEvent} trackEvent
+       */
+      _trackEnd(e) {
+        let { _current, _clone, _nodes, items } = this;
+
+        if (!_current) {
+          return;
+        }
+
+        let updated = Array.from(this.querySelectorAll(this.itemSelector));
+        let originalIndex = _nodes.indexOf(_current);
+        let updatedIndex = updated.indexOf(_current);
+
+        if (_clone) {
+          _clone.parentNode.removeChild(_clone);
+          delete this._clone;
+        }
+
+        if (_current) {
+          _current.classList.remove(this.draggedClass);
+          delete this._current;
+        }
+
+        /**
+        * Update new order to items property. Can't use this.splice or this.notifySplices, because dom-repeat seems
+        * to bind data to nodes on a simple index. Notify would then cause the renderer to apply sorting a second
+        * time, rather than realizing that dom order already reflects data order. Clearing the data and re-inserting
+        * it beforeNextRender seems a viable workaround.
+        */
+
+        this.items = [];
+
+        Polymer.RenderStatus.beforeNextRender(this, () => {
+          items.splice(updatedIndex, 0, items.splice(originalIndex, 1)[0]);
+          this.items = items;
+        });
+      }
+    }
+  });
+}
+</script>

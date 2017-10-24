@@ -2,7 +2,7 @@
 <link rel="import" href="../../iron-ajax/iron-ajax.html">
 <link rel="import" href="../exmg-sortable.html">
 
-<dom-module id="demo-app">
+<dom-module id="exmg-sortable-demo">
   <template>
     <style>
     ul, li {
@@ -128,8 +128,11 @@
   </template>
 
   <script>
-    class DemoApp extends Polymer.Element {
-      static get is() { return 'demo-app'; }
+  'use strict';
+  {
+
+    class SortableDemo extends Polymer.Element {
+      static get is() { return 'exmg-sortable-demo'; }
       static get properties() {
         return {
           dataUrl: {
@@ -143,6 +146,7 @@
       }
     }
 
-    window.customElements.define(DemoApp.is, DemoApp);
+    window.customElements.define(SortableDemo.is, SortableDemo);
+  }
   </script>
 </dom-module>
