@@ -269,6 +269,10 @@
        * @param {number} dy
        */
       _animateNode(node, dx, dy) {
+        if (!node.animate) {
+          return;
+        }
+        
         // keep a stack of currently animating nodes to exclude as drag & drop targets.
         let anims = this._animating;
         anims.push(node);
