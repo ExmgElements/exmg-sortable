@@ -1,17 +1,17 @@
 [{
   "firstName": "Peter",
-  "lastName": "Nederlof",
-  "email": "peter@exmachina.nl"
+  "lastName": "Neder",
+  "email": "peter@email.com"
 },{
   "firstName": "Marloes",
-  "lastName": "Hautmann",
-  "email": "marloes@exmachina.nl"
+  "lastName": "Haut",
+  "email": "marloes@email.com"
 },{
   "firstName": "Mark",
-  "lastName": "Smits",
-  "email": "mark@exmachina.nl"
+  "lastName": "Smiths",
+  "email": "mark@email.com"
 },{
   "firstName": "Peter-Paul",
-  "lastName": "Elfferich",
-  "email": "pp@exmachina.nl"
+  "lastName": "Elf",
+  "email": "pp@email.com"
 }]
