@@ -1,0 +1,152 @@
+<link rel="import" href="../../polymer/polymer-element.html">
+<link rel="import" href="../../iron-ajax/iron-ajax.html">
+<link rel="import" href="../exmg-sortable.html">
+
+<dom-module id="exmg-sortable-demo">
+  <template>
+    <style>
+    ul, li {
+      margin-left: 0;
+      padding-left: 0;
+    }
+
+    li {
+      display: flex;
+      padding: 10px 15px;
+      border-bottom: 1px solid silver;
+    }
+
+    li.clone {
+      background: white;
+      width: 100%;
+      box-sizing: border-box;
+      box-shadow: 2px 2px 5px rgba(0,0,0,0.5);
+      opacity: 0.9;
+    }
+
+    li.dragged {
+      background: #c0c0c0;
+      opacity: 0.25;
+      box-shadow: 2px 2px 5px rgba(0,0,0,0.5) inset;
+    }
+
+    li > strong {
+      flex-grow: 1;
+    }
+
+    li > span {
+      width: 30%;
+    }
+
+    table {
+      border-collapse: collapse;
+      width: 100%;
+    }
+
+    td, th {
+      padding: 10px 15px;
+      border-bottom: 1px solid silver;
+    }
+
+    tr.dragged {
+      background: #f0f0f0;
+    }
+
+    tr.clone {
+      opacity: 0;
+    }
+
+    td.handle {
+      padding: 0;
+      vertical-align: middle;
+    }
+      td.handle span {
+        display: block;
+        background: gray;
+        width: 20px;
+        height: 20px;
+      }
+
+    .boxes {
+        margin-top: 2em;
+        overflow: hidden;
+    }
+
+    .box {
+      float: left;
+      width: 150px;
+      height: 150px;
+      padding: 10px;
+      margin: 20px;
+      box-sizing: border-box;
+      background: #f0f0f0;
+      box-shadow: 2px 2px 5px rgba(0,0,0,0.3);
+    }
+
+    .box.dragged {
+      opacity: 0;
+    }
+
+    </style>
+    <iron-ajax auto url="[[dataUrl]]" handle-as="json" last-response="{{users}}"></iron-ajax>
+
+    <exmg-sortable item-selector="li" items="{{users}}" orientation="vertical">
+      <ul>
+        <template is="dom-repeat" items="[[users]]">
+          <li>
+            <strong>[[item.firstName]]</strong>
+            <span>[[item.lastName]]</span>
+            <span>[[item.email]]</span>
+          </li>
+        </template>
+      </ul>
+    </exmg-sortable>
+
+    <exmg-sortable item-selector="div.box" items="{{users}}" animation-timing='{ "duration": 500 }'>
+      <div class="boxes">
+        <template is="dom-repeat" items="[[users]]">
+          <div class="box">
+            [[item.firstName]]
+          </div>
+        </template>
+      </div>
+    </exmg-sortable>
+
+    <exmg-sortable item-selector="tr" items="{{users}}" handle-selector=".handle span">
+      <table>
+        <template is="dom-repeat" items="[[users]]">
+          <tr>
+            <td class="handle"><span></span></td>
+            <th>[[item.firstName]]</th>
+            <td>[[item.lastName]]</td>
+            <td>[[item.email]]</td>
+          </tr>
+        </template>
+      </table>
+    </exmg-sortable>
+
+  </template>
+
+  <script>
+  'use strict';
+  {
+
+    class SortableDemo extends Polymer.Element {
+      static get is() { return 'exmg-sortable-demo'; }
+      static get properties() {
+        return {
+          dataUrl: {
+            type: String
+          },
+          users: {
+            type: Array,
+            notify: true
+          }
+        };
+      }
+    }
+
+    window.customElements.define(SortableDemo.is, SortableDemo);
+  }
+  </script>
+</dom-module>

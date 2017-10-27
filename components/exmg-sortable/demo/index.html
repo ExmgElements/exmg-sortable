@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
+
+    <title>exmg-sortable demo</title>
+    <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+    <link rel="import" href="exmg-sortable-demo.html">
+
+    <style>
+    :root {
+      font-family: arial, sans-serif;
+      line-height: 1.5;
+    }
+    </style>
+  </head>
+  <body>
+    <div class="vertical-section-container centered">
+      <h3>Basic exmg-sortable demo</h3>
+      <p>
+        Sort the below items by dragging them around.
+      </p>
+
+      <exmg-sortable-demo
+        data-url="data/users.json"
+      ></exmg-sortable-demo>
+
+    </div>
+  </body>
+</html>

@@ -1,0 +1,43 @@
+{
+  "name": "exmg-sortable",
+  "description": "Enables drag and drop sorting of items in a list or table",
+  "main": "exmg-sortable.html",
+  "authors": [
+    "Ex Machina Group"
+  ],
+  "keywords": [
+    "web-components",
+    "polymer",
+    "sortable"
+  ],
+  "private": false,
+  "homepage": "https://github.com/ExmgElements/exmg-sortable",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:ExmgElements/exmg-sortable.git"
+  },
+  "dependencies": {
+    "polymer": "Polymer/polymer#^2.0.0"
+  },
+  "devDependencies": {
+    "iron-ajax": "PolymerElements/iron-ajax#^2.0.0",
+    "iron-demo-helpers": "PolymerElements/iron-demo-helpers#^2.0.0",
+    "web-component-tester": "Polymer/web-component-tester#^6.0.0",
+    "webcomponentsjs": "webcomponents/webcomponentsjs#^1.0.0",
+    "iron-component": "page#^1.7.1",
+    "iron-component-page": "^3.0.1"
+  },
+  "resolutions": {
+    "polymer": "^2.0.0"
+  },
+  "_release": "3e887377ab",
+  "_resolution": {
+    "type": "branch",
+    "branch": "master",
+    "commit": "3e887377ab4a8605c6f8fc98cabfa2b4450557aa"
+  },
+  "_source": "https://github.com/ExmgElements/exmg-sortable.git",
+  "_target": "master",
+  "_originalSource": "ExmgElements/exmg-sortable",
+  "_direct": true
+}

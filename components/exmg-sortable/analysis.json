@@ -1,0 +1,1216 @@
+{
+  "schema_version": "1.0.0",
+  "namespaces": [
+    {
+      "name": "Exmg",
+      "description": "",
+      "summary": "",
+      "sourceRange": {
+        "file": "exmg-sortable.html",
+        "start": {
+          "line": 49,
+          "column": 2
+        },
+        "end": {
+          "line": 49,
+          "column": 34
+        }
+      },
+      "elements": [
+        {
+          "description": "The `<exmg-sortable>` element Enables drag and drop sorting of nodes in a list, table or any other set of\nelements.\n\n```html\n<exmg-sortable items=\"{{foo}}\" item-selector=\"li\">\n <ul>\n   <template is=\"dom-repeat\" items=\"[[foo]]\">\n     <li>[[item.bar]]</li>\n   </template>\n </ul>\n</exmg-sortable>\n```",
+          "summary": "",
+          "path": "exmg-sortable.html",
+          "properties": [
+            {
+              "name": "animationTiming",
+              "type": "{duration: number, easing: string}",
+              "description": "Animation timing options",
+              "privacy": "public",
+              "sourceRange": {
+                "file": "exmg-sortable-mixin.html",
+                "start": {
+                  "line": 43,
+                  "column": 10
+                },
+                "end": {
+                  "line": 46,
+                  "column": 11
+                }
+              },
+              "metadata": {
+                "polymer": {}
+              },
+              "inheritedFrom": "Exmg.SortableMixin"
+            },
+            {
+              "name": "cloneClass",
+              "type": "string",
+              "description": "CSS class for the dragged node's clone",
+              "privacy": "public",
+              "sourceRange": {
+                "file": "exmg-sortable-mixin.html",
+                "start": {
+                  "line": 49,
+                  "column": 10
+                },
+                "end": {
+                  "line": 52,
+                  "column": 11
+                }
+              },
+              "metadata": {
+                "polymer": {}
+              },
+              "defaultValue": "\"clone\"",
+              "inheritedFrom": "Exmg.SortableMixin"
+            },
+            {
+              "name": "draggedClass",
+              "type": "string",
+              "description": "CSS class for the node that is being dragged",
+              "privacy": "public",
+              "sourceRange": {
+                "file": "exmg-sortable-mixin.html",
+                "start": {
+                  "line": 55,
+                  "column": 10
+                },
+                "end": {
+                  "line": 58,
+                  "column": 11
+                }
+              },
+              "metadata": {
+                "polymer": {}
+              },
+              "defaultValue": "\"dragged\"",
+              "inheritedFrom": "Exmg.SortableMixin"
+            },
+            {
+              "name": "draggingDisabled",
+              "type": "boolean",
+              "description": "Toggle to enable / disable sorting",
+              "privacy": "public",
+              "sourceRange": {
+                "file": "exmg-sortable-mixin.html",
+                "start": {
+                  "line": 61,
+                  "column": 10
+                },
+                "end": {
+                  "line": 65,
+                  "column": 11
+                }
+              },
+              "metadata": {
+                "polymer": {
+                  "observer": "\"_disabledChanged\""
+                }
+              },
+              "defaultValue": "false",
+              "inheritedFrom": "Exmg.SortableMixin"
+            },
+            {
+              "name": "handleSelector",
+              "type": "string",
+              "description": "Optional handle selector to drag items with instead of items themselves.",
+              "privacy": "public",
+              "sourceRange": {
+                "file": "exmg-sortable-mixin.html",
+                "start": {
+                  "line": 68,
+                  "column": 10
+                },
+                "end": {
+                  "line": 68,
+                  "column": 32
+                }
+              },
+              "metadata": {
+                "polymer": {}
+              },
+              "inheritedFrom": "Exmg.SortableMixin"
+            },
+            {
+              "name": "items",
+              "type": "Array",
+              "description": "Array of items that represents the data of selected nodes",
+              "privacy": "public",
+              "sourceRange": {
+                "file": "exmg-sortable-mixin.html",
+                "start": {
+                  "line": 71,
+                  "column": 10
+                },
+                "end": {
+                  "line": 74,
+                  "column": 11
+                }
+              },
+              "metadata": {
+                "polymer": {
+                  "notify": true
+                }
+              },
+              "inheritedFrom": "Exmg.SortableMixin"
+            },
+            {
+              "name": "itemSelector",
+              "type": "string",
+              "description": "CSS Selector for the nodes that should be draggagle.",
+              "privacy": "public",
+              "sourceRange": {
+                "file": "exmg-sortable-mixin.html",
+                "start": {
+                  "line": 77,
+                  "column": 10
+                },
+                "end": {
+                  "line": 77,
+                  "column": 30
+                }
+              },
+              "metadata": {
+                "polymer": {}
+              },
+              "inheritedFrom": "Exmg.SortableMixin"
+            },
+            {
+              "name": "orientation",
+              "type": "string",
+              "description": "Optionally set to \"horizontal\" or \"vertical\" to lock drag orientation.",
+              "privacy": "public",
+              "sourceRange": {
+                "file": "exmg-sortable-mixin.html",
+                "start": {
+                  "line": 80,
+                  "column": 10
+                },
+                "end": {
+                  "line": 80,
+                  "column": 29
+                }
+              },
+              "metadata": {
+                "polymer": {}
+              },
+              "inheritedFrom": "Exmg.SortableMixin"
+            }
+          ],
+          "methods": [
+            {
+              "name": "_disabledChanged",
+              "description": "Toggles the track listener depending on the `draggingDisabled` property.",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "exmg-sortable-mixin.html",
+                "start": {
+                  "line": 100,
+                  "column": 6
+                },
+                "end": {
+                  "line": 106,
+                  "column": 7
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "value"
+                }
+              ],
+              "inheritedFrom": "Exmg.SortableMixin"
+            },
+            {
+              "name": "_handleTrack",
+              "description": "Tracks a pointer from touchstart/mousedown to touchend/mouseup. Note that the start state is fired following\nthe first actual move event following a touchstart/mousedown.",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "exmg-sortable-mixin.html",
+                "start": {
+                  "line": 114,
+                  "column": 6
+                },
+                "end": {
+                  "line": 126,
+                  "column": 7
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "e"
+                }
+              ],
+              "inheritedFrom": "Exmg.SortableMixin"
+            },
+            {
+              "name": "_hitTest",
+              "description": "Fast and simple hit test to check whether the center of a node intersects with the rectangle of any of the\ngiven targets. Returns an array of matches.",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "exmg-sortable-mixin.html",
+                "start": {
+                  "line": 136,
+                  "column": 6
+                },
+                "end": {
+                  "line": 145,
+                  "column": 7
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "node",
+                  "type": "Node"
+                },
+                {
+                  "name": "targets",
+                  "type": "Array"
+                }
+              ],
+              "return": {
+                "type": "Array",
+                "desc": "matches"
+              },
+              "inheritedFrom": "Exmg.SortableMixin"
+            },
+            {
+              "name": "_createClone",
+              "description": "Clones a given node to visually drag around. The original node is left in the same flow as its siblings. Clone\nstyles are added onto the style object directly, since the ::slotted() selector can't universally target nodes\nthat may be nested an unknown amount of shadow dom levels deep.",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "exmg-sortable-mixin.html",
+                "start": {
+                  "line": 155,
+                  "column": 6
+                },
+                "end": {
+                  "line": 168,
+                  "column": 7
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "node",
+                  "type": "Node"
+                }
+              ],
+              "return": {
+                "type": "Node",
+                "desc": "clone"
+              },
+              "inheritedFrom": "Exmg.SortableMixin"
+            },
+            {
+              "name": "_trackStart",
+              "description": "Initialized a drag and drop sequence if a child node was clicked that matches the itemSelector property. If a\nhandleSelector is defined, a node matching this selector must be clicked instead.",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "exmg-sortable-mixin.html",
+                "start": {
+                  "line": 176,
+                  "column": 6
+                },
+                "end": {
+                  "line": 195,
+                  "column": 7
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "e"
+                }
+              ],
+              "inheritedFrom": "Exmg.SortableMixin"
+            },
+            {
+              "name": "_trackMove",
+              "description": "Moves the active node's clone to follow the pointer. The node that the clone intersects with (via hitTest) is\nthe insert point for updated sorting.",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "exmg-sortable-mixin.html",
+                "start": {
+                  "line": 203,
+                  "column": 6
+                },
+                "end": {
+                  "line": 232,
+                  "column": 7
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "e"
+                }
+              ],
+              "inheritedFrom": "Exmg.SortableMixin"
+            },
+            {
+              "name": "_insertAtTarget",
+              "description": "Inserts node at target to update sibling sorting. If the node precedes the target, it is inserted after it;\nIf it follows the target, it is inserted before it. This ensures any node can be dragged from the very\nbeginning to the very end and vice versa. The animateNode function is called for all nodes that moved because\nof this dom update.",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "exmg-sortable-mixin.html",
+                "start": {
+                  "line": 243,
+                  "column": 6
+                },
+                "end": {
+                  "line": 260,
+                  "column": 7
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "node",
+                  "type": "Node"
+                },
+                {
+                  "name": "target",
+                  "type": "Node"
+                }
+              ],
+              "inheritedFrom": "Exmg.SortableMixin"
+            },
+            {
+              "name": "_animateNode",
+              "description": "Triggers a CSS animation on a node with the given dx and dy. Used following dom updates to make it appear as\nif nodes animate from their old to their new position in the dom.",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "exmg-sortable-mixin.html",
+                "start": {
+                  "line": 270,
+                  "column": 6
+                },
+                "end": {
+                  "line": 290,
+                  "column": 7
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "node",
+                  "type": "Node"
+                },
+                {
+                  "name": "dx",
+                  "type": "number"
+                },
+                {
+                  "name": "dy",
+                  "type": "number"
+                }
+              ],
+              "inheritedFrom": "Exmg.SortableMixin"
+            },
+            {
+              "name": "_isAnimating",
+              "description": "Returns a boolean indicating whether the node is currently in an animation.",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "exmg-sortable-mixin.html",
+                "start": {
+                  "line": 298,
+                  "column": 6
+                },
+                "end": {
+                  "line": 300,
+                  "column": 7
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "node",
+                  "type": "Node"
+                }
+              ],
+              "return": {
+                "type": "boolean",
+                "desc": "isAnimating"
+              },
+              "inheritedFrom": "Exmg.SortableMixin"
+            },
+            {
+              "name": "_trackEnd",
+              "description": "Ends the drag and drop sequence and updates the new node order to the instance's items for binding and\nrendering purposes.",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "exmg-sortable-mixin.html",
+                "start": {
+                  "line": 308,
+                  "column": 6
+                },
+                "end": {
+                  "line": 342,
+                  "column": 7
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "e"
+                }
+              ],
+              "inheritedFrom": "Exmg.SortableMixin"
+            }
+          ],
+          "staticMethods": [],
+          "demos": [
+            {
+              "url": "demo/index.html",
+              "description": ""
+            }
+          ],
+          "metadata": {},
+          "sourceRange": {
+            "start": {
+              "line": 25,
+              "column": 2
+            },
+            "end": {
+              "line": 42,
+              "column": 3
+            }
+          },
+          "privacy": "public",
+          "superclass": "HTMLElement",
+          "name": "Exmg.SortableElement",
+          "attributes": [
+            {
+              "name": "animation-timing",
+              "description": "Animation timing options",
+              "sourceRange": {
+                "file": "exmg-sortable-mixin.html",
+                "start": {
+                  "line": 43,
+                  "column": 10
+                },
+                "end": {
+                  "line": 46,
+                  "column": 11
+                }
+              },
+              "metadata": {},
+              "type": "{duration: number, easing: string}",
+              "inheritedFrom": "Exmg.SortableMixin"
+            },
+            {
+              "name": "clone-class",
+              "description": "CSS class for the dragged node's clone",
+              "sourceRange": {
+                "file": "exmg-sortable-mixin.html",
+                "start": {
+                  "line": 49,
+                  "column": 10
+                },
+                "end": {
+                  "line": 52,
+                  "column": 11
+                }
+              },
+              "metadata": {},
+              "type": "string",
+              "inheritedFrom": "Exmg.SortableMixin"
+            },
+            {
+              "name": "dragged-class",
+              "description": "CSS class for the node that is being dragged",
+              "sourceRange": {
+                "file": "exmg-sortable-mixin.html",
+                "start": {
+                  "line": 55,
+                  "column": 10
+                },
+                "end": {
+                  "line": 58,
+                  "column": 11
+                }
+              },
+              "metadata": {},
+              "type": "string",
+              "inheritedFrom": "Exmg.SortableMixin"
+            },
+            {
+              "name": "dragging-disabled",
+              "description": "Toggle to enable / disable sorting",
+              "sourceRange": {
+                "file": "exmg-sortable-mixin.html",
+                "start": {
+                  "line": 61,
+                  "column": 10
+                },
+                "end": {
+                  "line": 65,
+                  "column": 11
+                }
+              },
+              "metadata": {},
+              "type": "boolean",
+              "inheritedFrom": "Exmg.SortableMixin"
+            },
+            {
+              "name": "handle-selector",
+              "description": "Optional handle selector to drag items with instead of items themselves.",
+              "sourceRange": {
+                "file": "exmg-sortable-mixin.html",
+                "start": {
+                  "line": 68,
+                  "column": 10
+                },
+                "end": {
+                  "line": 68,
+                  "column": 32
+                }
+              },
+              "metadata": {},
+              "type": "string",
+              "inheritedFrom": "Exmg.SortableMixin"
+            },
+            {
+              "name": "items",
+              "description": "Array of items that represents the data of selected nodes",
+              "sourceRange": {
+                "file": "exmg-sortable-mixin.html",
+                "start": {
+                  "line": 71,
+                  "column": 10
+                },
+                "end": {
+                  "line": 74,
+                  "column": 11
+                }
+              },
+              "metadata": {},
+              "type": "Array",
+              "inheritedFrom": "Exmg.SortableMixin"
+            },
+            {
+              "name": "item-selector",
+              "description": "CSS Selector for the nodes that should be draggagle.",
+              "sourceRange": {
+                "file": "exmg-sortable-mixin.html",
+                "start": {
+                  "line": 77,
+                  "column": 10
+                },
+                "end": {
+                  "line": 77,
+                  "column": 30
+                }
+              },
+              "metadata": {},
+              "type": "string",
+              "inheritedFrom": "Exmg.SortableMixin"
+            },
+            {
+              "name": "orientation",
+              "description": "Optionally set to \"horizontal\" or \"vertical\" to lock drag orientation.",
+              "sourceRange": {
+                "file": "exmg-sortable-mixin.html",
+                "start": {
+                  "line": 80,
+                  "column": 10
+                },
+                "end": {
+                  "line": 80,
+                  "column": 29
+                }
+              },
+              "metadata": {},
+              "type": "string",
+              "inheritedFrom": "Exmg.SortableMixin"
+            }
+          ],
+          "events": [],
+          "styling": {
+            "cssVariables": [],
+            "selectors": []
+          },
+          "slots": [],
+          "tagname": "exmg-sortable",
+          "mixins": [
+            "Exmg.SortableMixin"
+          ]
+        }
+      ],
+      "mixins": [
+        {
+          "description": "Element class mixin that enables drag and drop sorting of nodes in a list, table or any other set of\nelements as selected by the selector property. The items property must be the array of data that represents\nthese nodes.\n\nThe host element MUST define a CSS `position` value other than `static`, preferably `relative`. This ensures that\nthe dragged element can be properly positioned within it. A block-like `display` value is advised as well.",
+          "summary": "",
+          "path": "exmg-sortable-mixin.html",
+          "properties": [
+            {
+              "name": "animationTiming",
+              "type": "{duration: number, easing: string}",
+              "description": "Animation timing options",
+              "privacy": "public",
+              "sourceRange": {
+                "start": {
+                  "line": 43,
+                  "column": 10
+                },
+                "end": {
+                  "line": 46,
+                  "column": 11
+                }
+              },
+              "metadata": {
+                "polymer": {}
+              }
+            },
+            {
+              "name": "cloneClass",
+              "type": "string",
+              "description": "CSS class for the dragged node's clone",
+              "privacy": "public",
+              "sourceRange": {
+                "start": {
+                  "line": 49,
+                  "column": 10
+                },
+                "end": {
+                  "line": 52,
+                  "column": 11
+                }
+              },
+              "metadata": {
+                "polymer": {}
+              },
+              "defaultValue": "\"clone\""
+            },
+            {
+              "name": "draggedClass",
+              "type": "string",
+              "description": "CSS class for the node that is being dragged",
+              "privacy": "public",
+              "sourceRange": {
+                "start": {
+                  "line": 55,
+                  "column": 10
+                },
+                "end": {
+                  "line": 58,
+                  "column": 11
+                }
+              },
+              "metadata": {
+                "polymer": {}
+              },
+              "defaultValue": "\"dragged\""
+            },
+            {
+              "name": "draggingDisabled",
+              "type": "boolean",
+              "description": "Toggle to enable / disable sorting",
+              "privacy": "public",
+              "sourceRange": {
+                "start": {
+                  "line": 61,
+                  "column": 10
+                },
+                "end": {
+                  "line": 65,
+                  "column": 11
+                }
+              },
+              "metadata": {
+                "polymer": {
+                  "observer": "\"_disabledChanged\""
+                }
+              },
+              "defaultValue": "false"
+            },
+            {
+              "name": "handleSelector",
+              "type": "string",
+              "description": "Optional handle selector to drag items with instead of items themselves.",
+              "privacy": "public",
+              "sourceRange": {
+                "start": {
+                  "line": 68,
+                  "column": 10
+                },
+                "end": {
+                  "line": 68,
+                  "column": 32
+                }
+              },
+              "metadata": {
+                "polymer": {}
+              }
+            },
+            {
+              "name": "items",
+              "type": "Array",
+              "description": "Array of items that represents the data of selected nodes",
+              "privacy": "public",
+              "sourceRange": {
+                "start": {
+                  "line": 71,
+                  "column": 10
+                },
+                "end": {
+                  "line": 74,
+                  "column": 11
+                }
+              },
+              "metadata": {
+                "polymer": {
+                  "notify": true
+                }
+              }
+            },
+            {
+              "name": "itemSelector",
+              "type": "string",
+              "description": "CSS Selector for the nodes that should be draggagle.",
+              "privacy": "public",
+              "sourceRange": {
+                "start": {
+                  "line": 77,
+                  "column": 10
+                },
+                "end": {
+                  "line": 77,
+                  "column": 30
+                }
+              },
+              "metadata": {
+                "polymer": {}
+              }
+            },
+            {
+              "name": "orientation",
+              "type": "string",
+              "description": "Optionally set to \"horizontal\" or \"vertical\" to lock drag orientation.",
+              "privacy": "public",
+              "sourceRange": {
+                "start": {
+                  "line": 80,
+                  "column": 10
+                },
+                "end": {
+                  "line": 80,
+                  "column": 29
+                }
+              },
+              "metadata": {
+                "polymer": {}
+              }
+            }
+          ],
+          "methods": [
+            {
+              "name": "_disabledChanged",
+              "description": "Toggles the track listener depending on the `draggingDisabled` property.",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 100,
+                  "column": 6
+                },
+                "end": {
+                  "line": 106,
+                  "column": 7
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "value"
+                }
+              ]
+            },
+            {
+              "name": "_handleTrack",
+              "description": "Tracks a pointer from touchstart/mousedown to touchend/mouseup. Note that the start state is fired following\nthe first actual move event following a touchstart/mousedown.",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 114,
+                  "column": 6
+                },
+                "end": {
+                  "line": 126,
+                  "column": 7
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "e"
+                }
+              ]
+            },
+            {
+              "name": "_hitTest",
+              "description": "Fast and simple hit test to check whether the center of a node intersects with the rectangle of any of the\ngiven targets. Returns an array of matches.",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 136,
+                  "column": 6
+                },
+                "end": {
+                  "line": 145,
+                  "column": 7
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "node",
+                  "type": "Node"
+                },
+                {
+                  "name": "targets",
+                  "type": "Array"
+                }
+              ],
+              "return": {
+                "type": "Array",
+                "desc": "matches"
+              }
+            },
+            {
+              "name": "_createClone",
+              "description": "Clones a given node to visually drag around. The original node is left in the same flow as its siblings. Clone\nstyles are added onto the style object directly, since the ::slotted() selector can't universally target nodes\nthat may be nested an unknown amount of shadow dom levels deep.",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 155,
+                  "column": 6
+                },
+                "end": {
+                  "line": 168,
+                  "column": 7
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "node",
+                  "type": "Node"
+                }
+              ],
+              "return": {
+                "type": "Node",
+                "desc": "clone"
+              }
+            },
+            {
+              "name": "_trackStart",
+              "description": "Initialized a drag and drop sequence if a child node was clicked that matches the itemSelector property. If a\nhandleSelector is defined, a node matching this selector must be clicked instead.",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 176,
+                  "column": 6
+                },
+                "end": {
+                  "line": 195,
+                  "column": 7
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "e"
+                }
+              ]
+            },
+            {
+              "name": "_trackMove",
+              "description": "Moves the active node's clone to follow the pointer. The node that the clone intersects with (via hitTest) is\nthe insert point for updated sorting.",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 203,
+                  "column": 6
+                },
+                "end": {
+                  "line": 232,
+                  "column": 7
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "e"
+                }
+              ]
+            },
+            {
+              "name": "_insertAtTarget",
+              "description": "Inserts node at target to update sibling sorting. If the node precedes the target, it is inserted after it;\nIf it follows the target, it is inserted before it. This ensures any node can be dragged from the very\nbeginning to the very end and vice versa. The animateNode function is called for all nodes that moved because\nof this dom update.",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 243,
+                  "column": 6
+                },
+                "end": {
+                  "line": 260,
+                  "column": 7
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "node",
+                  "type": "Node"
+                },
+                {
+                  "name": "target",
+                  "type": "Node"
+                }
+              ]
+            },
+            {
+              "name": "_animateNode",
+              "description": "Triggers a CSS animation on a node with the given dx and dy. Used following dom updates to make it appear as\nif nodes animate from their old to their new position in the dom.",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 270,
+                  "column": 6
+                },
+                "end": {
+                  "line": 290,
+                  "column": 7
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "node",
+                  "type": "Node"
+                },
+                {
+                  "name": "dx",
+                  "type": "number"
+                },
+                {
+                  "name": "dy",
+                  "type": "number"
+                }
+              ]
+            },
+            {
+              "name": "_isAnimating",
+              "description": "Returns a boolean indicating whether the node is currently in an animation.",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 298,
+                  "column": 6
+                },
+                "end": {
+                  "line": 300,
+                  "column": 7
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "node",
+                  "type": "Node"
+                }
+              ],
+              "return": {
+                "type": "boolean",
+                "desc": "isAnimating"
+              }
+            },
+            {
+              "name": "_trackEnd",
+              "description": "Ends the drag and drop sequence and updates the new node order to the instance's items for binding and\nrendering purposes.",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 308,
+                  "column": 6
+                },
+                "end": {
+                  "line": 342,
+                  "column": 7
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "e"
+                }
+              ]
+            }
+          ],
+          "staticMethods": [],
+          "demos": [
+            {
+              "url": "demo/index.html",
+              "description": ""
+            }
+          ],
+          "metadata": {},
+          "sourceRange": {
+            "start": {
+              "line": 23,
+              "column": 2
+            },
+            "end": {
+              "line": 344,
+              "column": 4
+            }
+          },
+          "privacy": "public",
+          "name": "Exmg.SortableMixin",
+          "attributes": [
+            {
+              "name": "animation-timing",
+              "description": "Animation timing options",
+              "sourceRange": {
+                "start": {
+                  "line": 43,
+                  "column": 10
+                },
+                "end": {
+                  "line": 46,
+                  "column": 11
+                }
+              },
+              "metadata": {},
+              "type": "{duration: number, easing: string}"
+            },
+            {
+              "name": "clone-class",
+              "description": "CSS class for the dragged node's clone",
+              "sourceRange": {
+                "start": {
+                  "line": 49,
+                  "column": 10
+                },
+                "end": {
+                  "line": 52,
+                  "column": 11
+                }
+              },
+              "metadata": {},
+              "type": "string"
+            },
+            {
+              "name": "dragged-class",
+              "description": "CSS class for the node that is being dragged",
+              "sourceRange": {
+                "start": {
+                  "line": 55,
+                  "column": 10
+                },
+                "end": {
+                  "line": 58,
+                  "column": 11
+                }
+              },
+              "metadata": {},
+              "type": "string"
+            },
+            {
+              "name": "dragging-disabled",
+              "description": "Toggle to enable / disable sorting",
+              "sourceRange": {
+                "start": {
+                  "line": 61,
+                  "column": 10
+                },
+                "end": {
+                  "line": 65,
+                  "column": 11
+                }
+              },
+              "metadata": {},
+              "type": "boolean"
+            },
+            {
+              "name": "handle-selector",
+              "description": "Optional handle selector to drag items with instead of items themselves.",
+              "sourceRange": {
+                "start": {
+                  "line": 68,
+                  "column": 10
+                },
+                "end": {
+                  "line": 68,
+                  "column": 32
+                }
+              },
+              "metadata": {},
+              "type": "string"
+            },
+            {
+              "name": "items",
+              "description": "Array of items that represents the data of selected nodes",
+              "sourceRange": {
+                "start": {
+                  "line": 71,
+                  "column": 10
+                },
+                "end": {
+                  "line": 74,
+                  "column": 11
+                }
+              },
+              "metadata": {},
+              "type": "Array"
+            },
+            {
+              "name": "item-selector",
+              "description": "CSS Selector for the nodes that should be draggagle.",
+              "sourceRange": {
+                "start": {
+                  "line": 77,
+                  "column": 10
+                },
+                "end": {
+                  "line": 77,
+                  "column": 30
+                }
+              },
+              "metadata": {},
+              "type": "string"
+            },
+            {
+              "name": "orientation",
+              "description": "Optionally set to \"horizontal\" or \"vertical\" to lock drag orientation.",
+              "sourceRange": {
+                "start": {
+                  "line": 80,
+                  "column": 10
+                },
+                "end": {
+                  "line": 80,
+                  "column": 29
+                }
+              },
+              "metadata": {},
+              "type": "string"
+            }
+          ],
+          "events": [],
+          "styling": {
+            "cssVariables": [],
+            "selectors": []
+          },
+          "slots": []
+        }
+      ]
+    }
+  ]
+}
