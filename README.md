@@ -2,9 +2,19 @@
 
 Enables drag and drop sorting of items in a list or table
 
+Please visit the [API Documentation and demo](http://ExmgElements.github.io/exmg-sortable/) page for more information.
+
 ## Install the Polymer-CLI
 
 First, make sure you have the [Polymer CLI](https://www.npmjs.com/package/polymer-cli) installed. Then run `polymer serve` to serve your element locally.
+
+## Install
+
+Install the component using bower
+
+```
+$ bower install --save ExmgElements/exmg-sortable
+```
 
 ## Viewing Your Element
 
