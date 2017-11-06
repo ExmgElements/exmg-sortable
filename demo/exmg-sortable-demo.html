@@ -90,6 +90,7 @@
     </style>
     <iron-ajax auto url="[[dataUrl]]" handle-as="json" last-response="{{users}}"></iron-ajax>
 
+    <h2>List</h2>
     <exmg-sortable item-selector="li" items="{{users}}" orientation="vertical">
       <ul>
         <template is="dom-repeat" items="[[users]]">
@@ -102,6 +103,7 @@
       </ul>
     </exmg-sortable>
 
+    <h2>Cards</h2>
     <exmg-sortable item-selector="div.box" items="{{users}}" animation-timing='{ "duration": 500 }'>
       <div class="boxes">
         <template is="dom-repeat" items="[[users]]">
@@ -112,6 +114,7 @@
       </div>
     </exmg-sortable>
 
+    <h2>Table</h2>
     <exmg-sortable item-selector="tr" items="{{users}}" handle-selector=".handle span">
       <table>
         <template is="dom-repeat" items="[[users]]">
@@ -123,6 +126,21 @@
           </tr>
         </template>
       </table>
+    </exmg-sortable>
+
+    <h2>Manipulate order by event</h2>
+    <exmg-sortable
+      item-selector="div.box"
+      items="{{usersList}}"
+      on-sort-change="_handleSortChange"
+      animation-timing='{ "duration": 500 }'>
+      <div class="boxes">
+        <template is="dom-repeat" items="[[usersList]]" sort="_sortByIndex">
+          <div class="box">
+            [[item.firstName]] ([[item.index]])
+          </div>
+        </template>
+      </div>
     </exmg-sortable>
 
   </template>
@@ -141,8 +159,37 @@
           users: {
             type: Array,
             notify: true
+          },
+          usersList: {
+            type: Array,
+            computed: '_cloneUsers(users)'
           }
         };
+      }
+      _handleSortChange(e) {
+        const {oldIndex, newIndex} = e.detail
+        this._moveItem(oldIndex, newIndex);
+      }
+      _cloneUsers(users) {
+        return [...users];
+      }
+      _sortByIndex(a, b) {
+        return a.index - b.index;
+      }
+      _moveItem(oldIndex, newIndex) {
+        const users = this.usersList;
+        newIndex = Math.min(newIndex, users.length - 1);
+        users.forEach((user) => {
+          const {index} = user;
+          if (index === oldIndex) {
+            user.index = newIndex;
+          } else if (oldIndex > newIndex && index < oldIndex && index >= newIndex) {
+            user.index++;
+          } else if (oldIndex < newIndex && index > oldIndex && index <= newIndex) {
+            user.index--;
+          }
+        });
+        this.set('usersList', users);
       }
     }
 
