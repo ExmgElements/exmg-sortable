@@ -11,8 +11,9 @@
 
   /**
    * Element class mixin that enables drag and drop sorting of nodes in a list, table or any other set of
-   * elements as selected by the selector property. The items property must be the array of data that represents
-   * these nodes.
+   * elements as selected by the selector property. Fires a cancelable `dom-order-change` event with `sourceIndex` and
+   * `targetIndex` properties indicating user intent of the drag operation. This event may be prevented to keep the
+   * dom order as is. The handler is then assumed to update the dom, for instance via a model update.
    *
    * The host element MUST define a CSS `position` value other than `static`, preferably `relative`. This ensures that
    * the dragged element can be properly positioned within it. A block-like `display` value is advised as well.
@@ -67,12 +68,6 @@
 
           // Optional handle selector to drag items with instead of items themselves.
           handleSelector: String,
-
-          // Array of items that represents the data of selected nodes
-          items: {
-            type: Array,
-            notify: true
-          },
 
           // CSS Selector for the nodes that should be draggagle.
           itemSelector: String,
@@ -188,6 +183,7 @@
           this._current = node;
           this._nodes = Array.from(this.querySelectorAll(selector));
           this._clone = this._createClone(node);
+          this._origin = node.nextSibling;
           this._animating = [];
           this._limiter = SortableMixin.orientationMap[this.orientation];
 
@@ -272,7 +268,7 @@
         if (!node.animate) {
           return;
         }
-        
+
         // keep a stack of currently animating nodes to exclude as drag & drop targets.
         let anims = this._animating;
         anims.push(node);
@@ -307,41 +303,50 @@
        * @param {CustomEvent} trackEvent
        */
       _trackEnd(e) {
-        let { _current, _clone, _nodes, items } = this;
+        let { _current, _clone, _origin, _nodes } = this;
 
         if (!_current) {
           return;
         }
 
         let updated = Array.from(this.querySelectorAll(this.itemSelector));
-        let originalIndex = _nodes.indexOf(_current);
-        let updatedIndex = updated.indexOf(_current);
+        let sourceIndex = _nodes.indexOf(_current);
+        let targetIndex = updated.indexOf(_current);
 
-        if (_clone) {
-          _clone.parentNode.removeChild(_clone);
-          delete this._clone;
+        if (sourceIndex !== targetIndex) {
+          let orderEvent = new CustomEvent('dom-order-change', {
+            bubbles: false,
+            cancelable: true,
+            detail: {
+              sourceIndex: sourceIndex,
+              targetIndex: targetIndex
+            }
+          });
+
+          this.dispatchEvent(orderEvent);
+
+          // if prevented, the handler is assumed to update the dom itself, for instance via a model update.
+          if (orderEvent.defaultPrevented) {
+            _current.parentNode.insertBefore(_current, _origin);
+          }
         }
 
-        if (_current) {
-          _current.classList.remove(this.draggedClass);
-          delete this._current;
-        }
+        _clone.parentNode.removeChild(_clone);
+        _current.classList.remove(this.draggedClass);
 
-        /**
-        * Update new order to items property. Can't use this.splice or this.notifySplices, because dom-repeat seems
-        * to bind data to nodes on a simple index. Notify would then cause the renderer to apply sorting a second
-        * time, rather than realizing that dom order already reflects data order. Clearing the data and re-inserting
-        * it beforeNextRender seems a viable workaround.
-        */
-
-        this.items = [];
-
-        Polymer.RenderStatus.beforeNextRender(this, () => {
-          items.splice(updatedIndex, 0, items.splice(originalIndex, 1)[0]);
-          this.items = items;
-        });
+        delete this._clone;
+        delete this._current;
       }
     }
   });
+
+  /**
+   * Fired on release and contains `sourceIndex` and `targetindex` properties on the event's details that indicate
+   * the user's intent. May be prevented to not have sortable change dom order.
+   *
+   * @event dom-order-change
+   * @param {number} sourceIndex
+   * @param {number} targetIndex
+   */
 }
 </script>

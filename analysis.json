@@ -18,7 +18,7 @@
       },
       "elements": [
         {
-          "description": "The `<exmg-sortable>` element Enables drag and drop sorting of nodes in a list, table or any other set of\nelements.\n\n```html\n<exmg-sortable items=\"{{foo}}\" item-selector=\"li\">\n <ul>\n   <template is=\"dom-repeat\" items=\"[[foo]]\">\n     <li>[[item.bar]]</li>\n   </template>\n </ul>\n</exmg-sortable>\n```",
+          "description": "The `<exmg-sortable>` element Enables drag and drop sorting of nodes in a list, table or any other set of\nelements. \n\n```html\n<exmg-sortable item-selector=\"li\" on-dom-order-change=\"_myChangeHandler\">\n <ul>\n   <template is=\"dom-repeat\" items=\"[[foo]]\">\n     <li>[[item.bar]]</li>\n   </template>\n </ul>\n</exmg-sortable>\n```",
           "summary": "",
           "path": "exmg-sortable.html",
           "properties": [
@@ -30,11 +30,11 @@
               "sourceRange": {
                 "file": "exmg-sortable-mixin.html",
                 "start": {
-                  "line": 43,
+                  "line": 44,
                   "column": 10
                 },
                 "end": {
-                  "line": 46,
+                  "line": 47,
                   "column": 11
                 }
               },
@@ -51,11 +51,11 @@
               "sourceRange": {
                 "file": "exmg-sortable-mixin.html",
                 "start": {
-                  "line": 49,
+                  "line": 50,
                   "column": 10
                 },
                 "end": {
-                  "line": 52,
+                  "line": 53,
                   "column": 11
                 }
               },
@@ -73,11 +73,11 @@
               "sourceRange": {
                 "file": "exmg-sortable-mixin.html",
                 "start": {
-                  "line": 55,
+                  "line": 56,
                   "column": 10
                 },
                 "end": {
-                  "line": 58,
+                  "line": 59,
                   "column": 11
                 }
               },
@@ -95,11 +95,11 @@
               "sourceRange": {
                 "file": "exmg-sortable-mixin.html",
                 "start": {
-                  "line": 61,
+                  "line": 62,
                   "column": 10
                 },
                 "end": {
-                  "line": 65,
+                  "line": 66,
                   "column": 11
                 }
               },
@@ -119,39 +119,16 @@
               "sourceRange": {
                 "file": "exmg-sortable-mixin.html",
                 "start": {
-                  "line": 68,
+                  "line": 69,
                   "column": 10
                 },
                 "end": {
-                  "line": 68,
+                  "line": 69,
                   "column": 32
                 }
               },
               "metadata": {
                 "polymer": {}
-              },
-              "inheritedFrom": "Exmg.SortableMixin"
-            },
-            {
-              "name": "items",
-              "type": "Array",
-              "description": "Array of items that represents the data of selected nodes",
-              "privacy": "public",
-              "sourceRange": {
-                "file": "exmg-sortable-mixin.html",
-                "start": {
-                  "line": 71,
-                  "column": 10
-                },
-                "end": {
-                  "line": 74,
-                  "column": 11
-                }
-              },
-              "metadata": {
-                "polymer": {
-                  "notify": true
-                }
               },
               "inheritedFrom": "Exmg.SortableMixin"
             },
@@ -163,11 +140,11 @@
               "sourceRange": {
                 "file": "exmg-sortable-mixin.html",
                 "start": {
-                  "line": 77,
+                  "line": 72,
                   "column": 10
                 },
                 "end": {
-                  "line": 77,
+                  "line": 72,
                   "column": 30
                 }
               },
@@ -184,11 +161,11 @@
               "sourceRange": {
                 "file": "exmg-sortable-mixin.html",
                 "start": {
-                  "line": 80,
+                  "line": 75,
                   "column": 10
                 },
                 "end": {
-                  "line": 80,
+                  "line": 75,
                   "column": 29
                 }
               },
@@ -206,11 +183,11 @@
               "sourceRange": {
                 "file": "exmg-sortable-mixin.html",
                 "start": {
-                  "line": 100,
+                  "line": 95,
                   "column": 6
                 },
                 "end": {
-                  "line": 106,
+                  "line": 101,
                   "column": 7
                 }
               },
@@ -229,11 +206,11 @@
               "sourceRange": {
                 "file": "exmg-sortable-mixin.html",
                 "start": {
-                  "line": 114,
+                  "line": 109,
                   "column": 6
                 },
                 "end": {
-                  "line": 126,
+                  "line": 121,
                   "column": 7
                 }
               },
@@ -252,11 +229,11 @@
               "sourceRange": {
                 "file": "exmg-sortable-mixin.html",
                 "start": {
-                  "line": 136,
+                  "line": 131,
                   "column": 6
                 },
                 "end": {
-                  "line": 145,
+                  "line": 140,
                   "column": 7
                 }
               },
@@ -284,11 +261,11 @@
               "sourceRange": {
                 "file": "exmg-sortable-mixin.html",
                 "start": {
-                  "line": 155,
+                  "line": 150,
                   "column": 6
                 },
                 "end": {
-                  "line": 168,
+                  "line": 163,
                   "column": 7
                 }
               },
@@ -312,11 +289,11 @@
               "sourceRange": {
                 "file": "exmg-sortable-mixin.html",
                 "start": {
-                  "line": 176,
+                  "line": 171,
                   "column": 6
                 },
                 "end": {
-                  "line": 195,
+                  "line": 191,
                   "column": 7
                 }
               },
@@ -335,11 +312,11 @@
               "sourceRange": {
                 "file": "exmg-sortable-mixin.html",
                 "start": {
-                  "line": 203,
+                  "line": 199,
                   "column": 6
                 },
                 "end": {
-                  "line": 232,
+                  "line": 228,
                   "column": 7
                 }
               },
@@ -358,11 +335,11 @@
               "sourceRange": {
                 "file": "exmg-sortable-mixin.html",
                 "start": {
-                  "line": 243,
+                  "line": 239,
                   "column": 6
                 },
                 "end": {
-                  "line": 260,
+                  "line": 256,
                   "column": 7
                 }
               },
@@ -386,11 +363,11 @@
               "sourceRange": {
                 "file": "exmg-sortable-mixin.html",
                 "start": {
-                  "line": 270,
+                  "line": 266,
                   "column": 6
                 },
                 "end": {
-                  "line": 290,
+                  "line": 286,
                   "column": 7
                 }
               },
@@ -418,11 +395,11 @@
               "sourceRange": {
                 "file": "exmg-sortable-mixin.html",
                 "start": {
-                  "line": 298,
+                  "line": 294,
                   "column": 6
                 },
                 "end": {
-                  "line": 300,
+                  "line": 296,
                   "column": 7
                 }
               },
@@ -446,11 +423,11 @@
               "sourceRange": {
                 "file": "exmg-sortable-mixin.html",
                 "start": {
-                  "line": 308,
+                  "line": 304,
                   "column": 6
                 },
                 "end": {
-                  "line": 342,
+                  "line": 338,
                   "column": 7
                 }
               },
@@ -491,11 +468,11 @@
               "sourceRange": {
                 "file": "exmg-sortable-mixin.html",
                 "start": {
-                  "line": 43,
+                  "line": 44,
                   "column": 10
                 },
                 "end": {
-                  "line": 46,
+                  "line": 47,
                   "column": 11
                 }
               },
@@ -509,11 +486,11 @@
               "sourceRange": {
                 "file": "exmg-sortable-mixin.html",
                 "start": {
-                  "line": 49,
+                  "line": 50,
                   "column": 10
                 },
                 "end": {
-                  "line": 52,
+                  "line": 53,
                   "column": 11
                 }
               },
@@ -527,11 +504,11 @@
               "sourceRange": {
                 "file": "exmg-sortable-mixin.html",
                 "start": {
-                  "line": 55,
+                  "line": 56,
                   "column": 10
                 },
                 "end": {
-                  "line": 58,
+                  "line": 59,
                   "column": 11
                 }
               },
@@ -545,11 +522,11 @@
               "sourceRange": {
                 "file": "exmg-sortable-mixin.html",
                 "start": {
-                  "line": 61,
+                  "line": 62,
                   "column": 10
                 },
                 "end": {
-                  "line": 65,
+                  "line": 66,
                   "column": 11
                 }
               },
@@ -563,11 +540,11 @@
               "sourceRange": {
                 "file": "exmg-sortable-mixin.html",
                 "start": {
-                  "line": 68,
+                  "line": 69,
                   "column": 10
                 },
                 "end": {
-                  "line": 68,
+                  "line": 69,
                   "column": 32
                 }
               },
@@ -576,34 +553,16 @@
               "inheritedFrom": "Exmg.SortableMixin"
             },
             {
-              "name": "items",
-              "description": "Array of items that represents the data of selected nodes",
-              "sourceRange": {
-                "file": "exmg-sortable-mixin.html",
-                "start": {
-                  "line": 71,
-                  "column": 10
-                },
-                "end": {
-                  "line": 74,
-                  "column": 11
-                }
-              },
-              "metadata": {},
-              "type": "Array",
-              "inheritedFrom": "Exmg.SortableMixin"
-            },
-            {
               "name": "item-selector",
               "description": "CSS Selector for the nodes that should be draggagle.",
               "sourceRange": {
                 "file": "exmg-sortable-mixin.html",
                 "start": {
-                  "line": 77,
+                  "line": 72,
                   "column": 10
                 },
                 "end": {
-                  "line": 77,
+                  "line": 72,
                   "column": 30
                 }
               },
@@ -617,11 +576,11 @@
               "sourceRange": {
                 "file": "exmg-sortable-mixin.html",
                 "start": {
-                  "line": 80,
+                  "line": 75,
                   "column": 10
                 },
                 "end": {
-                  "line": 80,
+                  "line": 75,
                   "column": 29
                 }
               },
@@ -644,7 +603,7 @@
       ],
       "mixins": [
         {
-          "description": "Element class mixin that enables drag and drop sorting of nodes in a list, table or any other set of\nelements as selected by the selector property. The items property must be the array of data that represents\nthese nodes.\n\nThe host element MUST define a CSS `position` value other than `static`, preferably `relative`. This ensures that\nthe dragged element can be properly positioned within it. A block-like `display` value is advised as well.",
+          "description": "Element class mixin that enables drag and drop sorting of nodes in a list, table or any other set of\nelements as selected by the selector property. Fires a cancelable `dom-order-change` event with `sourceIndex` and\n`targetIndex` properties indicating user intent of the drag operation. This event may be prevented to keep the\ndom order as is. The handler is then assumed to update the dom, for instance via a model update.\n\nThe host element MUST define a CSS `position` value other than `static`, preferably `relative`. This ensures that\nthe dragged element can be properly positioned within it. A block-like `display` value is advised as well.",
           "summary": "",
           "path": "exmg-sortable-mixin.html",
           "properties": [
@@ -655,11 +614,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 43,
+                  "line": 44,
                   "column": 10
                 },
                 "end": {
-                  "line": 46,
+                  "line": 47,
                   "column": 11
                 }
               },
@@ -674,11 +633,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 49,
+                  "line": 50,
                   "column": 10
                 },
                 "end": {
-                  "line": 52,
+                  "line": 53,
                   "column": 11
                 }
               },
@@ -694,11 +653,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 55,
+                  "line": 56,
                   "column": 10
                 },
                 "end": {
-                  "line": 58,
+                  "line": 59,
                   "column": 11
                 }
               },
@@ -714,11 +673,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 61,
+                  "line": 62,
                   "column": 10
                 },
                 "end": {
-                  "line": 65,
+                  "line": 66,
                   "column": 11
                 }
               },
@@ -736,37 +695,16 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 68,
+                  "line": 69,
                   "column": 10
                 },
                 "end": {
-                  "line": 68,
+                  "line": 69,
                   "column": 32
                 }
               },
               "metadata": {
                 "polymer": {}
-              }
-            },
-            {
-              "name": "items",
-              "type": "Array",
-              "description": "Array of items that represents the data of selected nodes",
-              "privacy": "public",
-              "sourceRange": {
-                "start": {
-                  "line": 71,
-                  "column": 10
-                },
-                "end": {
-                  "line": 74,
-                  "column": 11
-                }
-              },
-              "metadata": {
-                "polymer": {
-                  "notify": true
-                }
               }
             },
             {
@@ -776,11 +714,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 77,
+                  "line": 72,
                   "column": 10
                 },
                 "end": {
-                  "line": 77,
+                  "line": 72,
                   "column": 30
                 }
               },
@@ -795,11 +733,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 80,
+                  "line": 75,
                   "column": 10
                 },
                 "end": {
-                  "line": 80,
+                  "line": 75,
                   "column": 29
                 }
               },
@@ -815,11 +753,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 100,
+                  "line": 95,
                   "column": 6
                 },
                 "end": {
-                  "line": 106,
+                  "line": 101,
                   "column": 7
                 }
               },
@@ -836,11 +774,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 114,
+                  "line": 109,
                   "column": 6
                 },
                 "end": {
-                  "line": 126,
+                  "line": 121,
                   "column": 7
                 }
               },
@@ -857,11 +795,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 136,
+                  "line": 131,
                   "column": 6
                 },
                 "end": {
-                  "line": 145,
+                  "line": 140,
                   "column": 7
                 }
               },
@@ -887,11 +825,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 155,
+                  "line": 150,
                   "column": 6
                 },
                 "end": {
-                  "line": 168,
+                  "line": 163,
                   "column": 7
                 }
               },
@@ -913,11 +851,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 176,
+                  "line": 171,
                   "column": 6
                 },
                 "end": {
-                  "line": 195,
+                  "line": 191,
                   "column": 7
                 }
               },
@@ -934,11 +872,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 203,
+                  "line": 199,
                   "column": 6
                 },
                 "end": {
-                  "line": 232,
+                  "line": 228,
                   "column": 7
                 }
               },
@@ -955,11 +893,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 243,
+                  "line": 239,
                   "column": 6
                 },
                 "end": {
-                  "line": 260,
+                  "line": 256,
                   "column": 7
                 }
               },
@@ -981,11 +919,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 270,
+                  "line": 266,
                   "column": 6
                 },
                 "end": {
-                  "line": 290,
+                  "line": 286,
                   "column": 7
                 }
               },
@@ -1011,11 +949,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 298,
+                  "line": 294,
                   "column": 6
                 },
                 "end": {
-                  "line": 300,
+                  "line": 296,
                   "column": 7
                 }
               },
@@ -1037,11 +975,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 308,
+                  "line": 304,
                   "column": 6
                 },
                 "end": {
-                  "line": 342,
+                  "line": 338,
                   "column": 7
                 }
               },
@@ -1063,11 +1001,11 @@
           "metadata": {},
           "sourceRange": {
             "start": {
-              "line": 23,
+              "line": 24,
               "column": 2
             },
             "end": {
-              "line": 344,
+              "line": 340,
               "column": 4
             }
           },
@@ -1079,11 +1017,11 @@
               "description": "Animation timing options",
               "sourceRange": {
                 "start": {
-                  "line": 43,
+                  "line": 44,
                   "column": 10
                 },
                 "end": {
-                  "line": 46,
+                  "line": 47,
                   "column": 11
                 }
               },
@@ -1095,11 +1033,11 @@
               "description": "CSS class for the dragged node's clone",
               "sourceRange": {
                 "start": {
-                  "line": 49,
+                  "line": 50,
                   "column": 10
                 },
                 "end": {
-                  "line": 52,
+                  "line": 53,
                   "column": 11
                 }
               },
@@ -1111,11 +1049,11 @@
               "description": "CSS class for the node that is being dragged",
               "sourceRange": {
                 "start": {
-                  "line": 55,
+                  "line": 56,
                   "column": 10
                 },
                 "end": {
-                  "line": 58,
+                  "line": 59,
                   "column": 11
                 }
               },
@@ -1127,11 +1065,11 @@
               "description": "Toggle to enable / disable sorting",
               "sourceRange": {
                 "start": {
-                  "line": 61,
+                  "line": 62,
                   "column": 10
                 },
                 "end": {
-                  "line": 65,
+                  "line": 66,
                   "column": 11
                 }
               },
@@ -1143,11 +1081,11 @@
               "description": "Optional handle selector to drag items with instead of items themselves.",
               "sourceRange": {
                 "start": {
-                  "line": 68,
+                  "line": 69,
                   "column": 10
                 },
                 "end": {
-                  "line": 68,
+                  "line": 69,
                   "column": 32
                 }
               },
@@ -1155,31 +1093,15 @@
               "type": "string"
             },
             {
-              "name": "items",
-              "description": "Array of items that represents the data of selected nodes",
-              "sourceRange": {
-                "start": {
-                  "line": 71,
-                  "column": 10
-                },
-                "end": {
-                  "line": 74,
-                  "column": 11
-                }
-              },
-              "metadata": {},
-              "type": "Array"
-            },
-            {
               "name": "item-selector",
               "description": "CSS Selector for the nodes that should be draggagle.",
               "sourceRange": {
                 "start": {
-                  "line": 77,
+                  "line": 72,
                   "column": 10
                 },
                 "end": {
-                  "line": 77,
+                  "line": 72,
                   "column": 30
                 }
               },
@@ -1191,11 +1113,11 @@
               "description": "Optionally set to \"horizontal\" or \"vertical\" to lock drag orientation.",
               "sourceRange": {
                 "start": {
-                  "line": 80,
+                  "line": 75,
                   "column": 10
                 },
                 "end": {
-                  "line": 80,
+                  "line": 75,
                   "column": 29
                 }
               },

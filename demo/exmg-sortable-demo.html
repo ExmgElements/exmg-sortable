@@ -91,7 +91,11 @@
     <iron-ajax auto url="[[dataUrl]]" handle-as="json" last-response="{{users}}"></iron-ajax>
 
     <h2>List</h2>
-    <exmg-sortable item-selector="li" items="{{users}}" orientation="vertical">
+    <exmg-sortable
+      item-selector="li"
+      orientation="vertical"
+      on-dom-order-change="_orderChange"
+    >
       <ul>
         <template is="dom-repeat" items="[[users]]">
           <li>
@@ -104,7 +108,11 @@
     </exmg-sortable>
 
     <h2>Cards</h2>
-    <exmg-sortable item-selector="div.box" items="{{users}}" animation-timing='{ "duration": 500 }'>
+    <exmg-sortable
+      item-selector="div.box"
+      animation-timing='{ "duration": 500 }'
+      on-dom-order-change="_orderChange"
+    >
       <div class="boxes">
         <template is="dom-repeat" items="[[users]]">
           <div class="box">
@@ -115,7 +123,11 @@
     </exmg-sortable>
 
     <h2>Table</h2>
-    <exmg-sortable item-selector="tr" items="{{users}}" handle-selector=".handle span">
+    <exmg-sortable
+      item-selector="tr"
+      handle-selector=".handle span"
+      on-dom-order-change="_orderChange"
+    >
       <table>
         <template is="dom-repeat" items="[[users]]">
           <tr>
@@ -128,12 +140,11 @@
       </table>
     </exmg-sortable>
 
-    <h2>Manipulate order by event</h2>
+    <h2>Manipulate sorted data</h2>
     <exmg-sortable
       item-selector="div.box"
-      items="{{usersList}}"
-      on-sort-change="_handleSortChange"
-      animation-timing='{ "duration": 500 }'>
+      on-dom-order-change="_usersOrderChange"
+    >
       <div class="boxes">
         <template is="dom-repeat" items="[[usersList]]" sort="_sortByIndex">
           <div class="box">
@@ -166,30 +177,53 @@
           }
         };
       }
-      _handleSortChange(e) {
-        const {oldIndex, newIndex} = e.detail
-        this._moveItem(oldIndex, newIndex);
-      }
       _cloneUsers(users) {
         return [...users];
       }
       _sortByIndex(a, b) {
         return a.index - b.index;
       }
-      _moveItem(oldIndex, newIndex) {
-        const users = this.usersList;
-        newIndex = Math.min(newIndex, users.length - 1);
-        users.forEach((user) => {
-          const {index} = user;
-          if (index === oldIndex) {
-            user.index = newIndex;
-          } else if (oldIndex > newIndex && index < oldIndex && index >= newIndex) {
-            user.index++;
-          } else if (oldIndex < newIndex && index > oldIndex && index <= newIndex) {
-            user.index--;
-          }
+
+      /**
+       * Simple order update: splices the data array to change physical rendering order.
+       */
+      _orderChange(event) {
+        // prevent event to not let sortable change the dom
+        event.preventDefault();
+
+        // splice data and let dom-repeat rerender
+        let source = this.splice('users', event.detail.sourceIndex, 1)[0];
+        this.splice('users', event.detail.targetIndex, 0, source);
+      }
+
+      /**
+       * Complex order update: manipulates a dom-repeat sorted data array to make it reflect desired rendering order.
+       */
+      _usersOrderChange(event) {
+        // prevent event to not let sortable change the dom
+        event.preventDefault();
+
+        let sortable = event.target;
+        let repeater = sortable.querySelector('dom-repeat');
+
+        // get an array of the model in its current order via dom-repeat,
+        let sorted = sortable._nodes.map(node => repeater.modelForElement(node));
+
+        // update order with given splices,
+        let source = sorted.splice(event.detail.sourceIndex, 1)[0];
+        sorted.splice(event.detail.targetIndex, 0, source);
+
+        // and apply a new ascending index in that order. This obviously only works for simple - and known - sorting
+        // methods that we can hardcode to, and where item properties may be manipulated to change sorting. If a
+        // filter method is used to conditionally display items, this may all horribly fail.
+
+        let index = 1;
+        sorted.forEach(model => {
+          model.set('item.index', index++);
         });
-        this.set('usersList', users);
+
+        // A forced render is required here, or dom-repeat won't redraw properly.
+        repeater.render();
       }
     }
 
