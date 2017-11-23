@@ -161,7 +161,9 @@
   {
 
     class SortableDemo extends Polymer.Element {
-      static get is() { return 'exmg-sortable-demo'; }
+      static get is() {
+        return 'exmg-sortable-demo';
+      }
       static get properties() {
         return {
           dataUrl: {
@@ -192,7 +194,7 @@
         event.preventDefault();
 
         // splice data and let dom-repeat rerender
-        let source = this.splice('users', event.detail.sourceIndex, 1)[0];
+        const source = this.splice('users', event.detail.sourceIndex, 1)[0];
         this.splice('users', event.detail.targetIndex, 0, source);
       }
 
@@ -203,14 +205,14 @@
         // prevent event to not let sortable change the dom
         event.preventDefault();
 
-        let sortable = event.target;
-        let repeater = sortable.querySelector('dom-repeat');
+        const sortable = event.target;
+        const repeater = sortable.querySelector('dom-repeat');
 
         // get an array of the model in its current order via dom-repeat,
-        let sorted = sortable._nodes.map(node => repeater.modelForElement(node));
+        const sorted = sortable._nodes.map(node => repeater.modelForElement(node));
 
         // update order with given splices,
-        let source = sorted.splice(event.detail.sourceIndex, 1)[0];
+        const source = sorted.splice(event.detail.sourceIndex, 1)[0];
         sorted.splice(event.detail.targetIndex, 0, source);
 
         // and apply a new ascending index in that order. This obviously only works for simple - and known - sorting

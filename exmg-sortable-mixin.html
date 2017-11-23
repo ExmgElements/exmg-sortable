@@ -44,7 +44,7 @@
            */
           animationTiming: {
             type: Object,
-            value: { duration: 200, easing: 'ease-out' }
+            value: {duration: 200, easing: 'ease-out'}
           },
 
           // CSS class for the dragged node's clone
@@ -82,8 +82,8 @@
        */
       static get orientationMap() {
         return {
-          horizontal: { x: 1, y: 0 },
-          vertical: { x: 0, y: 1 }
+          horizontal: {x: 1, y: 0},
+          vertical: {x: 0, y: 1}
         };
       }
 
@@ -93,7 +93,7 @@
        * @param {Boolean} newValue
        * @param {Boolean} oldValue
        */
-      _disabledChanged(value /*, oldValue */) {
+      _disabledChanged(value) {
         if (value === false) {
           Polymer.Gestures.addListener(this, 'track', this._trackListener);
         } else {
@@ -108,7 +108,7 @@
        * @param {CustomEvent} trackEvent
        */
       _handleTrack(e) {
-        switch(e.detail.state) {
+        switch (e.detail.state) {
           case 'start':
             this._trackStart(e);
             break;
@@ -130,12 +130,12 @@
        * @return {Array} matches
        */
       _hitTest(node, targets) {
-        let { left, top, width, height } = node.getBoundingClientRect();
-        let x = left + (width / 2);
-        let y = top + (height / 2);
+        const {left, top, width, height} = node.getBoundingClientRect();
+        const x = left + (width / 2);
+        const y = top + (height / 2);
 
         return targets.filter(item => {
-          let { left, right, top, bottom } = item.getBoundingClientRect();
+          const {left, right, top, bottom} = item.getBoundingClientRect();
           return ! (x < left || x > right || y < top || y > bottom);
         });
       }
@@ -149,8 +149,8 @@
        * @return {Node} clone
        */
       _createClone(node) {
-        let clone = node.cloneNode(true);
-        let { offsetLeft: x, offsetTop: y } = node;
+        const clone = node.cloneNode(true);
+        const {offsetLeft: x, offsetTop: y} = node;
 
         Object.assign(clone.style, {
           position: 'absolute',
@@ -170,13 +170,13 @@
        * @param {CustomEvent} trackEvent
        */
       _trackStart(e) {
-        let handle = this.handleSelector;
+        const handle = this.handleSelector;
         if (handle && !e.target.closest(handle)) {
           return;
         }
 
-        let selector = this.itemSelector;
-        let node = e.target.closest(selector);
+        const selector = this.itemSelector;
+        const node = e.target.closest(selector);
         if (node) {
           e.preventDefault();
 
@@ -198,14 +198,14 @@
        * @param {CustomEvent} trackEvent
        */
       _trackMove(e) {
-        let { _current, _clone, _limiter } = this;
+        const {_current, _clone, _limiter} = this;
         if (!_current) {
           return;
         }
 
         e.preventDefault();
 
-        let { dx, dy } = e.detail;
+        let {dx, dy} = e.detail;
         if (_limiter) {
           dx = dx * _limiter.x;
           dy = dy * _limiter.y;
@@ -215,14 +215,14 @@
           transform: `translate3d(${dx}px, ${dy}px, 0)`
         });
 
-        let target = this._hitTest(_clone, this._nodes)[0];
+        const target = this._hitTest(_clone, this._nodes)[0];
         if (
-            // if clone intersects with a valid target,
-            target &&
-            // other than its own origin,
-            (target !== _current) &&
-            // and the target isn't currently animating, which causes false hit tests,
-            this._isAnimating(target) === false
+          // if clone intersects with a valid target,
+          target &&
+          // other than its own origin,
+          (target !== _current) &&
+          // and the target isn't currently animating, which causes false hit tests,
+          this._isAnimating(target) === false
         ) {
           this._insertAtTarget(_current, target);
         }
@@ -238,18 +238,18 @@
        * @param {Node} target
        */
       _insertAtTarget(node, target) {
-        let offsets = this._nodes.map(item => ({
+        const offsets = this._nodes.map(item => ({
           x: item.offsetLeft,
           y: item.offsetTop
         }));
 
-        let insert = (node.compareDocumentPosition(target) & 4) ? target.nextSibling : target;
+        const insert = (node.compareDocumentPosition(target) & 4) ? target.nextSibling : target;
         node.parentNode.insertBefore(node, insert);
 
         this._nodes.forEach((node, i) => {
-          let { x, y } = offsets[i];
-          let dx = x - node.offsetLeft;
-          let dy = y - node.offsetTop;
+          const {x, y} = offsets[i];
+          const dx = x - node.offsetLeft;
+          const dy = y - node.offsetTop;
           if (dx !== 0 || dy !== 0) {
             this._animateNode(node, dx, dy);
           }
@@ -270,15 +270,15 @@
         }
 
         // keep a stack of currently animating nodes to exclude as drag & drop targets.
-        let anims = this._animating;
+        const anims = this._animating;
         anims.push(node);
 
         // animate from dx/dy (old node position) to none (new node position)
         node.animate([
-          { transform: `translate3d(${dx}px, ${dy}px, 0)` },
-          { transform: 'none' }
+          {transform: `translate3d(${dx}px, ${dy}px, 0)`},
+          {transform: 'none'}
         ], this.animationTiming).addEventListener('finish', e => {
-          let index = anims.indexOf(node);
+          const index = anims.indexOf(node);
           if (index > -1) {
             // splice out when done to unlock as a valid target
             anims.splice(index, 1);
@@ -303,18 +303,18 @@
        * @param {CustomEvent} trackEvent
        */
       _trackEnd(e) {
-        let { _current, _clone, _origin, _nodes } = this;
+        const {_current, _clone, _origin, _nodes} = this;
 
         if (!_current) {
           return;
         }
 
-        let updated = Array.from(this.querySelectorAll(this.itemSelector));
-        let sourceIndex = _nodes.indexOf(_current);
-        let targetIndex = updated.indexOf(_current);
+        const updated = Array.from(this.querySelectorAll(this.itemSelector));
+        const sourceIndex = _nodes.indexOf(_current);
+        const targetIndex = updated.indexOf(_current);
 
         if (sourceIndex !== targetIndex) {
-          let orderEvent = new CustomEvent('dom-order-change', {
+          const orderEvent = new CustomEvent('dom-order-change', {
             bubbles: false,
             cancelable: true,
             detail: {
@@ -337,7 +337,7 @@
         delete this._clone;
         delete this._current;
       }
-    }
+    };
   });
 
   /**
