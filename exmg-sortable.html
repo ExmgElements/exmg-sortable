@@ -1,8 +1,6 @@
 <link rel="import" href="../polymer/polymer-element.html">
 <link rel="import" href="./exmg-sortable-mixin.html">
 <script>
-'use strict';
-{
   /**
    * The `<exmg-sortable>` element Enables drag and drop sorting of nodes in a list, table or any other set of
    * elements.
@@ -41,13 +39,5 @@
       `;
     }
   }
-
   window.customElements.define(SortableElement.is, SortableElement);
-
-  /**
-   * @namespace Exmg
-   */
-  window.Exmg = window.Exmg || {};
-  Exmg.SortableElement = SortableElement;
-}
 </script>
