@@ -1,29 +1,43 @@
 {
-  "name": "exmg-sortable",
-  "private": true,
+  "name": "@exmg/exmg-sortable",
+  "version": "3.0.0",
   "description": "Enables drag and drop sorting of items in a list or table",
-  "main": "exmg-sortable.html",
-  "repository": "ExmgElements/exmg-sortable",
-  "keywords": [
-    "Exmg",
-    "ExmgElements",
-    "exmg-sortable",
-    "web-components",
-    "web-component",
-    "polymer"
+  "contributors": [
+    "Ex Machina Group"
   ],
-  "author": "Ex Machina",
+  "keywords": [
+    "web-components",
+    "polymer",
+    "sortable"
+  ],
+  "main": "exmg-sortable.js",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com:ExmgElements/exmg-sortable.git"
+  },
+  "homepage": "https://github.com/ExmgElements/exmg-sortable",
+  "dependencies": {
+    "@polymer/iron-component-page": "^3.0.0-pre.19",
+    "@polymer/polymer": "^3.0.0-pre.13"
+  },
   "devDependencies": {
-    "bower": "latest",
+    "@polymer/iron-demo-helpers": "^3.0.0-pre.12",
+    "@webcomponents/webcomponentsjs": "^2.0.0-beta.2",
     "eslint": "^4.11.0",
     "eslint-config-exmg": "latest",
     "eslint-plugin-html": "^3.0.0",
-    "polymer-cli": "^1.2.0"
+    "wct-browser-legacy": "^1.0.0"
   },
-  "homepage": "https://github.com/ExmgElements/",
+  "resolutions": {
+    "@webcomponents/webcomponentsjs": "2.0.0",
+    "type-detect": "1.0.0",
+    "supports-color": "3.1.2",
+    "inherits": "2.0.3",
+    "samsam": "1.1.2"
+  },
   "scripts": {
-    "lint": "polymer lint --rules polymer-2 --input *.html",
+    "lint": "polymer lint --rules polymer-3 --input *.js",
     "eslint": "eslint . --ext js,html --ignore-path .gitignore",
-    "analyze": "polymer analyze --input exmg-sortable.html exmg-sortable-mixin.html > analysis.json"
+    "analyze": "polymer analyze > analysis.json"
   }
 }
