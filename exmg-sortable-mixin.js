@@ -1,5 +1,16 @@
 import {dedupingMixin} from '@polymer/polymer/lib/utils/mixin.js';
+import {Debouncer} from '@polymer/polymer/lib/utils/debounce.js';
+import {microTask} from '@polymer/polymer/lib/utils/async.js';
 import {addListener, removeListener} from '@polymer/polymer/lib/utils/gestures.js';
+
+
+/**
+* Orientation map to limit dragging to horizontal or vertical.
+*/
+const orientationMap =  {
+  horizontal: {x: 1, y: 0},
+  vertical: {x: 0, y: 1}
+};
 
 /**
  * Element class mixin that enables drag and drop sorting of nodes in a list, table or any other set of
@@ -58,16 +69,6 @@ const ExmgSortableMixin = (superClass) => class extends superClass {
 
       // Optionally set to "horizontal" or "vertical" to lock drag orientation.
       orientation: String
-    };
-  }
-
-  /**
-   * Orientation map to limit dragging to horizontal or vertical.
-   */
-  static get orientationMap() {
-    return {
-      horizontal: {x: 1, y: 0},
-      vertical: {x: 0, y: 1}
     };
   }
 
@@ -139,7 +140,8 @@ const ExmgSortableMixin = (superClass) => class extends superClass {
     Object.assign(clone.style, {
       position: 'absolute',
       left: `${x}px`,
-      top: `${y}px`
+      top: `${y}px`,
+      willChange: 'transform,opacity',
     });
 
     clone.classList.add(this.cloneClass);
@@ -161,6 +163,7 @@ const ExmgSortableMixin = (superClass) => class extends superClass {
 
     const selector = this.itemSelector;
     const node = e.target.closest(selector);
+
     if (node) {
       e.preventDefault();
 
@@ -169,8 +172,9 @@ const ExmgSortableMixin = (superClass) => class extends superClass {
       this._clone = this._createClone(node);
       this._origin = node.nextSibling;
       this._animating = [];
-      this._limiter = SortableMixin.orientationMap[this.orientation];
-
+  
+      this._limiter = orientationMap[this.orientation];
+      
       node.classList.add(this.draggedClass);
     }
   }
@@ -196,7 +200,7 @@ const ExmgSortableMixin = (superClass) => class extends superClass {
     }
 
     Object.assign(_clone.style, {
-      transform: `translate3d(${dx}px, ${dy}px, 0)`
+      'transform': `translate3d(${dx}px, ${dy}px, 0)`
     });
 
     const target = this._hitTest(_clone, this._nodes)[0];
@@ -210,6 +214,7 @@ const ExmgSortableMixin = (superClass) => class extends superClass {
     ) {
       this._insertAtTarget(_current, target);
     }
+    
   }
 
   /**
@@ -230,14 +235,15 @@ const ExmgSortableMixin = (superClass) => class extends superClass {
     const insert = (node.compareDocumentPosition(target) & 4) ? target.nextSibling : target;
     node.parentNode.insertBefore(node, insert);
 
-    this._nodes.forEach((node, i) => {
-      const {x, y} = offsets[i];
-      const dx = x - node.offsetLeft;
-      const dy = y - node.offsetTop;
-      if (dx !== 0 || dy !== 0) {
-        this._animateNode(node, dx, dy);
-      }
-    });
+    // this._nodes.forEach((node, i) => {
+    //   const {x, y} = offsets[i];
+    //   const dx = x - node.offsetLeft;
+    //   const dy = y - node.offsetTop;
+    //   if (dx !== 0 || dy !== 0) {
+    //     console.log('ani', dx, dy);
+    //     this._animateNode(node, dx, dy);
+    //   }
+    // });
   }
 
   /**
@@ -260,7 +266,8 @@ const ExmgSortableMixin = (superClass) => class extends superClass {
     // animate from dx/dy (old node position) to none (new node position)
     node.animate([
       {transform: `translate3d(${dx}px, ${dy}px, 0)`},
-      {transform: 'none'}
+      {transform: 'none'},
+
     ], this.animationTiming).addEventListener('finish', e => {
       const index = anims.indexOf(node);
       if (index > -1) {
