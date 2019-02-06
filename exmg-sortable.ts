@@ -1,5 +1,5 @@
 import {LitElement, html, customElement} from 'lit-element';
-import {SortableMixin} from './old-exmg-sortable-mixin.js';
+import {SortableMixin} from './exmg-sortable-mixin';
 
 function applyMixins(derivedCtor: any, baseCtors: any[]) {
   baseCtors.forEach(baseCtor => {
@@ -24,7 +24,7 @@ function applyMixins(derivedCtor: any, baseCtors: any[]) {
  * ```
  */
 @customElement('exmg-sortable')
-class SortableElement extends LitElement implements SortableMixin {
+export class SortableElement extends SortableMixin {
   render() {
     return html`
       <style>
@@ -36,5 +36,12 @@ class SortableElement extends LitElement implements SortableMixin {
       <slot></slot>
     `;
   }
+
+  constructor() {
+    super();
+    /* set drag properties */
+    this.itemSelector = 'li';
+    this.cloneProperties = ['index','item'];
+  }
 }
-applyMixins(SortableElement, [SortableMixin]);
+// applyMixins(SortableElement, [SortableMixin]);

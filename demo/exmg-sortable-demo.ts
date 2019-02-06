@@ -40,17 +40,27 @@ export class SortableDemo extends LitElement {
   /**
    * Simple order update: splices the data array to change physical rendering order.
    */
-  private orderChange(event: CustomEvent) {
-    console.log('orderChange');
-    // prevent event to not let sortable change the dom
-    event.preventDefault();
-
-    // splice data and let dom-repeat rerender
-    const source = this.users.splice(event.detail.sourceIndex, 1)[0];
-    this.users.splice(event.detail.targetIndex, 0, source);
+  private orderChange(e: CustomEvent) {
+    console.log('orderChange', e);
+    setTimeout(() => {
+      const {sourceIndex, targetIndex} = e.detail;
+      const items = [...this.users];
+      items.splice(targetIndex, 0, items.splice(sourceIndex, 1)[0]);
+      this.users = items;
+      console.log('this.users', this.users);
+    }, 0);
   }
 
   render() {
+    const rowRender = (user, index) => {
+      console.log('rowRender');
+      return html`
+                      <li index="${index}">
+                        <strong>${user.email}</strong>
+                    </li>
+            `;
+    };
+
     return html`
       <style>
       ul, li {
@@ -138,23 +148,11 @@ export class SortableDemo extends LitElement {
       </style>
 
       <h2>List</h2>
-      <exmg-sortable item-selector="li" orientation="vertical" on-dom-order-change="${this.orderChange}">
-        <ul>
-          ${
-            repeat(
-                this.users,
-                item => item.email,
-                (item) => html`
-                    <li>
-                      <strong>${item.firstName}</strong>
-                      <span>${item.lastName}</span>
-                      <span>${item.email}</span>
-                    </li>
-                `
-            )
-          }
-        </ul>
-      </exmg-sortable>
+      <ul>
+        <exmg-sortable .items=${this.users} item-selector="li" orientation="vertical" @dom-order-change="${this.orderChange}">
+          ${this.users ? this.users.map((user, index) => rowRender(user, index)) : 'Loading'}
+        </exmg-sortable>
+      </ul>
     `;
   }
 }

@@ -1,7 +1,7 @@
-import { property, LitElement, PropertyValues } from '@polymer/lit-element';
+import { property, LitElement, PropertyValues } from 'lit-element';
 import {addListener, removeListener} from '@polymer/polymer/lib/utils/gestures.js';
 
-export class sortable extends LitElement {
+export class SortableMixin extends LitElement {
 
   /**
    * Toggle for enabling/disabling dragging
@@ -11,7 +11,7 @@ export class sortable extends LitElement {
   private _draggingDisabled: boolean = false;
 
   @property({type: String})
-  public handleSelector: string = '.drag-handle';
+  public handleSelector: string = '';
 
   @property({type: String})
   public itemSelector: string = '.item';
@@ -95,6 +95,7 @@ export class sortable extends LitElement {
         this._trackMove(e);
         break;
       case 'end':
+        console.log('end');
         this._trackEnd();
         break;
     }
@@ -160,16 +161,19 @@ export class sortable extends LitElement {
 
     /* Look for closest handle */
     if (handle && !targetElement.closest(handle)) {
+      console.log('return');
       return;
     }
 
     const selector = this.itemSelector;
     const node = targetElement.closest(selector);
 
+    console.log('node', node);
     if (node) {
       e.preventDefault();
 
       this._current = node;
+      console.log('this._current', this._current);
       this._nodes = Array.from(this.querySelectorAll(selector)) || [];
       this._clone = this._createClone(node);
       this._origin = node.nextSibling;
@@ -187,6 +191,7 @@ export class sortable extends LitElement {
   private _trackEnd(): void {
     const {_current, _nodes} = this;
 
+    console.log('_current', _current);
     if (!_current) {
       return;
     }
@@ -195,6 +200,9 @@ export class sortable extends LitElement {
 
     const sourceIndex = _nodes.indexOf(_current);
     const targetIndex = updated.indexOf(_current);
+
+    console.log('sourceIndex', sourceIndex);
+    console.log('targetIndex', targetIndex);
 
     if (sourceIndex !== targetIndex) {
       // this.draggingDisabled = true;
@@ -240,7 +248,7 @@ export class sortable extends LitElement {
     /* Work arround for issue with first element being party offscreen when drag start */
     this.dy = dy - (this.initialScrollTop - scrollTop);
 
-    console.log('_trackMove', dx, dy);
+    // console.log('_trackMove', dx, dy);
   }
 
   /**
@@ -272,6 +280,7 @@ export class sortable extends LitElement {
   }
 
   public reset() {
+    console.log('reset');
     if(this._clone !== undefined && this._clone.parentNode !== null) {
      this._clone.parentNode.removeChild(this._clone);
     }
