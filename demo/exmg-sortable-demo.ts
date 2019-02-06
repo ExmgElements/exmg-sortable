@@ -50,14 +50,6 @@ export class SortableDemo extends LitElement {
   }
 
   render() {
-    const rowRender = (user, index) => {
-      return html`
-                      <li index="${index}">
-                        <strong>${user.email}</strong>
-                    </li>
-            `;
-    };
-
     return html`
       <style>
       ul, li {
@@ -146,14 +138,31 @@ export class SortableDemo extends LitElement {
 
       <h2>List</h2>
       <ul>
-        <exmg-sortable .items=${this.users} item-selector="li" orientation="vertical" @dom-order-change="${this.orderChange}">
-          ${this.users ? this.users.map((user, index) => rowRender(user, index)) : 'Loading'}
+        <exmg-sortable
+            .items=${this.users}
+            item-selector="li"
+            orientation="vertical"
+            @dom-order-change="${this.orderChange}"
+        >
+          ${this.users.map((user) => {
+            return html`
+              <li>
+                  <strong>${user.email}</strong>
+              </li>
+            `;
+          })}
         </exmg-sortable>
       </ul>
 
       <h2>Cards</h2>
       <div class="boxes">
-        <exmg-sortable item-selector="div.box" @dom-order-change="${this.orderChange}">
+        <exmg-sortable
+            .items=${this.users}
+            handle-selector="div"
+            item-selector="div"
+            orientation="horizontal"
+            @dom-order-change="${this.orderChange}"
+        >
           ${this.users.map((user) => {
             return html`
               <div class="box">

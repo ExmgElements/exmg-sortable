@@ -48,7 +48,7 @@ export class SortableElement extends LitElement {
   public animationTiming: any = {duration: 200, easing: 'ease-out'};
 
   @property({type: String})
-  public orientation: 'horizontal'|'vertical' = 'horizontal';
+  public orientation?: 'horizontal'|'vertical';
 
   /**
    * Toggle for enabling/disabling dragging
@@ -217,6 +217,8 @@ export class SortableElement extends LitElement {
     this.dx = dx;
     /* Work arround for issue with first element being party offscreen when drag start */
     this.dy = dy - (this.initialScrollTop - scrollTop);
+
+    console.log('trackMove', this.dx, this.dy);
   }
 
   /**
