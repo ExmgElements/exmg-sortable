@@ -157,8 +157,8 @@ export class SortableDemo extends LitElement {
       <div class="boxes">
         <exmg-sortable
             .items=${this.users}
-            handle-selector="div"
-            item-selector="div"
+            handle-selector="div.box"
+            item-selector="div.box"
             @dom-order-change="${this.orderChange}"
         >
           ${this.users.map((user) => {
