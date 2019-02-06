@@ -70,7 +70,6 @@ export class SortableElement extends LitElement {
   private dx: number | undefined;
   private dy: number | undefined;
   private initialScrollTop: number = 0;
-  private limiter?: any;
 
   constructor() {
     super();
@@ -163,8 +162,6 @@ export class SortableElement extends LitElement {
       this.draggedElementOrigin = node.nextSibling;
       this.animatedElements = [];
 
-      this.limiter = orientationMap[this.orientation];
-
       this.draggedElement!.classList.add(this.draggedClass);
     }
   }
@@ -209,9 +206,9 @@ export class SortableElement extends LitElement {
     let {dx, dy} = (<any>e).detail;
     const scrollTop = Math.max(window.pageYOffset, document.documentElement.scrollTop, document.body.scrollTop);
 
-    if (this.limiter) {
-      dx = dx * this.limiter.x;
-      dy = dy * this.limiter.y;
+    if (this.orientation) {
+      dx = dx * orientationMap[this.orientation].x;
+      dy = dy * orientationMap[this.orientation].y;
     }
 
     this.dx = dx;

@@ -1,5 +1,4 @@
 import {LitElement, html, customElement, property} from 'lit-element';
-import {repeat} from 'lit-html/directives/repeat';
 import '@polymer/iron-ajax/iron-ajax.js';
 import '../exmg-sortable.js';
 
@@ -160,7 +159,6 @@ export class SortableDemo extends LitElement {
             .items=${this.users}
             handle-selector="div"
             item-selector="div"
-            orientation="horizontal"
             @dom-order-change="${this.orderChange}"
         >
           ${this.users.map((user) => {
