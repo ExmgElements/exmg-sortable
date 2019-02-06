@@ -41,19 +41,16 @@ export class SortableDemo extends LitElement {
    * Simple order update: splices the data array to change physical rendering order.
    */
   private orderChange(e: CustomEvent) {
-    console.log('orderChange', e);
     setTimeout(() => {
       const {sourceIndex, targetIndex} = e.detail;
       const items = [...this.users];
       items.splice(targetIndex, 0, items.splice(sourceIndex, 1)[0]);
       this.users = items;
-      console.log('this.users', this.users);
     }, 0);
   }
 
   render() {
     const rowRender = (user, index) => {
-      console.log('rowRender');
       return html`
                       <li index="${index}">
                         <strong>${user.email}</strong>
