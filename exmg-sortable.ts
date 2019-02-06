@@ -1,5 +1,13 @@
-import {PolymerElement, html} from '@polymer/polymer/polymer-element.js';
-import {SortableMixin} from './exmg-sortable-mixin.js';
+import {LitElement, html, customElement} from 'lit-element';
+import {SortableMixin} from './old-exmg-sortable-mixin.js';
+
+function applyMixins(derivedCtor: any, baseCtors: any[]) {
+  baseCtors.forEach(baseCtor => {
+    Object.getOwnPropertyNames(baseCtor.prototype).forEach(name => {
+      derivedCtor.prototype[name] = baseCtor.prototype[name];
+    });
+  });
+}
 
 /**
  * The `<exmg-sortable>` element Enables drag and drop sorting of nodes in a list, table or any other set of
@@ -14,18 +22,10 @@ import {SortableMixin} from './exmg-sortable-mixin.js';
  *  </ul>
  * </exmg-sortable>
  * ```
- *
- * @customElement
- * @polymer
- * @memberof Exmg
- * @appliesMixin Exmg.SortableMixin
- * @demo demo/index.html
  */
-class SortableElement extends SortableMixin(PolymerElement) {
-  static get is() {
-    return 'exmg-sortable';
-  }
-  static get template() {
+@customElement('exmg-sortable')
+class SortableElement extends LitElement implements SortableMixin {
+  render() {
     return html`
       <style>
         :host {
@@ -37,4 +37,4 @@ class SortableElement extends SortableMixin(PolymerElement) {
     `;
   }
 }
-window.customElements.define(SortableElement.is, SortableElement);
+applyMixins(SortableElement, [SortableMixin]);
