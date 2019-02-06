@@ -146,7 +146,9 @@ export class SortableDemo extends LitElement {
           ${this.users.map((user) => {
             return html`
               <li>
-                  <strong>${user.email}</strong>
+                  <strong>${user.firstName}</strong>
+                  <span>${user.lastName}</span>
+                  <span>${user.email}</span>
               </li>
             `;
           })}
@@ -155,10 +157,10 @@ export class SortableDemo extends LitElement {
 
       <h2>Cards</h2>
       <exmg-sortable
-          .items=${this.users}
-          handle-selector="div.box"
-          item-selector="div.box"
-          @dom-order-change="${this.orderChange}"
+        .items=${this.users}
+        handle-selector="div.box"
+        item-selector="div.box"
+        @dom-order-change="${this.orderChange}"
       >
         <div class="boxes">
           ${this.users.map((user) => {
@@ -169,6 +171,26 @@ export class SortableDemo extends LitElement {
             `;
           })}
         </div>
+      </exmg-sortable>
+
+      <h2>Table</h2>
+      <exmg-sortable
+        item-selector="tr"
+        handle-selector=".handle span"
+        @dom-order-change="${this.orderChange}"
+      >
+        <table>
+          ${this.users.map((user) => {
+            return html`
+              <tr>
+                <td class="handle"><span></span></td>
+                <td>${user.firstName}</td>
+                <td>${user.lastName}</td>
+                <td>${user.email}</td>
+              </tr>
+            `;
+          })}
+        </table>
       </exmg-sortable>
     `;
   }
