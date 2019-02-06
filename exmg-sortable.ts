@@ -2,6 +2,14 @@ import {LitElement, html, customElement, property, PropertyValues} from 'lit-ele
 import {addListener, removeListener} from '@polymer/polymer/lib/utils/gestures.js';
 
 /**
+ * Orientation map to limit dragging to horizontal or vertical.
+ */
+const orientationMap =  {
+  horizontal: {x: 1, y: 0},
+  vertical: {x: 0, y: 1},
+};
+
+/**
  * The `<exmg-sortable>` element Enables drag and drop sorting of nodes in a list, table or any other set of
  * elements.
  *
@@ -36,6 +44,12 @@ export class SortableElement extends LitElement {
   @property({type: String})
   public draggedClass: string = 'dragged';
 
+  @property({type: Object, attribute: 'animation-timing'})
+  public animationTiming: any = {duration: 200, easing: 'ease-out'};
+
+  @property({type: String})
+  public orientation: 'horizontal'|'vertical' = 'horizontal';
+
   /**
    * Toggle for enabling/disabling dragging
    * @type {Boolean}
@@ -43,8 +57,8 @@ export class SortableElement extends LitElement {
   @property({type: Boolean})
   private isDraggable: boolean = true;
 
-  @property({type: Array})
-  private cloneProperties: string[] = ['index', 'item'];
+  // @property({type: Array})
+  // private cloneProperties: string[] = ['index', 'item'];
 
   private dragRequestPending: boolean = false;
 
@@ -56,6 +70,7 @@ export class SortableElement extends LitElement {
   private dx: number | undefined;
   private dy: number | undefined;
   private initialScrollTop: number = 0;
+  private limiter?: any;
 
   constructor() {
     super();
@@ -148,6 +163,8 @@ export class SortableElement extends LitElement {
       this.draggedElementOrigin = node.nextSibling;
       this.animatedElements = [];
 
+      this.limiter = orientationMap[this.orientation];
+
       this.draggedElement!.classList.add(this.draggedClass);
     }
   }
@@ -189,8 +206,13 @@ export class SortableElement extends LitElement {
   private trackMove(e: Event): void {
     e.preventDefault();
 
-    const {dx, dy} = (<any>e).detail;
+    let {dx, dy} = (<any>e).detail;
     const scrollTop = Math.max(window.pageYOffset, document.documentElement.scrollTop, document.body.scrollTop);
+
+    if (this.limiter) {
+      dx = dx * this.limiter.x;
+      dy = dy * this.limiter.y;
+    }
 
     this.dx = dx;
     /* Work arround for issue with first element being party offscreen when drag start */
@@ -259,8 +281,7 @@ export class SortableElement extends LitElement {
     }
 
     // keep a stack of currently animating nodes to exclude as drag & drop targets.
-    const anims = this.animatedElements;
-    anims.push(node);
+    this.animatedElements.push(node);
 
     Object.assign(node.style, {
       willChange: 'transform',
@@ -270,14 +291,14 @@ export class SortableElement extends LitElement {
     node.animate([
       {transform: `translate3d(${dx}px, ${dy}px, 0)`},
       {transform: 'none'},
-    ], {duration: 200, easing: 'ease-out'}).addEventListener('finish', () => {
-      const index = anims.indexOf(node);
+    ], this.animationTiming).addEventListener('finish', () => {
+      const index = this.animatedElements.indexOf(node);
       Object.assign(node.style, {
         willChange: 'initial',
       });
-      if (index > -1) {
+      if (index !== -1) {
         // splice out when done to unlock as a valid target
-        anims.splice(index, 1);
+        this.animatedElements.splice(index, 1);
       }
     });
   }

@@ -150,6 +150,19 @@ export class SortableDemo extends LitElement {
           ${this.users ? this.users.map((user, index) => rowRender(user, index)) : 'Loading'}
         </exmg-sortable>
       </ul>
+
+      <h2>Cards</h2>
+      <div class="boxes">
+        <exmg-sortable item-selector="div.box" @dom-order-change="${this.orderChange}">
+          ${this.users.map((user) => {
+            return html`
+              <div class="box">
+                ${user.firstName}
+              </div>
+            `;
+          })}
+        </exmg-sortable>
+      </div>
     `;
   }
 }
