@@ -18,6 +18,24 @@ import {addListener, removeListener} from '@polymer/polymer/lib/utils/gestures.j
 @customElement('exmg-sortable')
 export class SortableElement extends LitElement {
 
+  @property({type: String, attribute: 'handle-selector'})
+  public handleSelector: string = 'li';
+
+  @property({type: String, attribute: 'item-selector'})
+  public itemSelector: string = 'li';
+
+  @property({type: Array})
+  public items?: any[];
+
+  @property({type: Boolean, attribute: 'animation-enabled'})
+  public animationEnabled: boolean = false;
+
+  @property({type: String, attribute: 'clone-class'})
+  public cloneClass: string = 'clone';
+
+  @property({type: String})
+  public draggedClass: string = 'dragged';
+
   /**
    * Toggle for enabling/disabling dragging
    * @type {Boolean}
@@ -25,26 +43,8 @@ export class SortableElement extends LitElement {
   @property({type: Boolean})
   private isDraggable: boolean = true;
 
-  @property({type: String})
-  public handleSelector: string = 'li';
-
-  @property({type: String})
-  public itemSelector: string = 'li';
-
   @property({type: Array})
-  public items?: any[];
-
-  @property({type: Array})
-  public cloneProperties: string[] = [];
-
-  @property({type: Boolean})
-  public animationEnabled: boolean = false;
-
-  @property({type: String})
-  public cloneClass: string = 'clone';
-
-  @property({type: String})
-  public draggedClass: string = 'dragged';
+  private cloneProperties: string[] = ['index', 'item'];
 
   private dragRequestPending: boolean = false;
 
@@ -59,8 +59,6 @@ export class SortableElement extends LitElement {
 
   constructor() {
     super();
-
-    this.cloneProperties = ['index', 'item'];
 
     /* Save function references */
     this.updatePointer = this.updatePointer.bind(this);
@@ -150,7 +148,7 @@ export class SortableElement extends LitElement {
       this.draggedElementOrigin = node.nextSibling;
       this.animatedElements = [];
 
-      node.classList.add(this.draggedClass);
+      this.draggedElement!.classList.add(this.draggedClass);
     }
   }
 
@@ -331,7 +329,7 @@ export class SortableElement extends LitElement {
     const clone = <any>node.cloneNode(true);
 
     /* Element properties will be lost on close so reattach */
-    this.cloneProperties.map(cp => clone[cp] = (<any>node)[cp]);
+    // this.cloneProperties.forEach(cp => clone[cp] = (<any>node)[cp]);
 
     const {offsetLeft: x, offsetTop: y} = node;
     this.dx = 0;
