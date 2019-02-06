@@ -136,13 +136,13 @@ export class SortableDemo extends LitElement {
       </style>
 
       <h2>List</h2>
-      <ul>
-        <exmg-sortable
-            .items=${this.users}
-            item-selector="li"
-            orientation="vertical"
-            @dom-order-change="${this.orderChange}"
-        >
+      <exmg-sortable
+        .items=${this.users}
+        item-selector="li"
+        orientation="vertical"
+        @dom-order-change="${this.orderChange}"
+      >
+        <ul>
           ${this.users.map((user) => {
             return html`
               <li>
@@ -150,17 +150,17 @@ export class SortableDemo extends LitElement {
               </li>
             `;
           })}
-        </exmg-sortable>
-      </ul>
+        </ul>
+      </exmg-sortable>
 
       <h2>Cards</h2>
-      <div class="boxes">
-        <exmg-sortable
-            .items=${this.users}
-            handle-selector="div.box"
-            item-selector="div.box"
-            @dom-order-change="${this.orderChange}"
-        >
+      <exmg-sortable
+          .items=${this.users}
+          handle-selector="div.box"
+          item-selector="div.box"
+          @dom-order-change="${this.orderChange}"
+      >
+        <div class="boxes">
           ${this.users.map((user) => {
             return html`
               <div class="box">
@@ -168,8 +168,8 @@ export class SortableDemo extends LitElement {
               </div>
             `;
           })}
-        </exmg-sortable>
-      </div>
+        </div>
+      </exmg-sortable>
     `;
   }
 }
