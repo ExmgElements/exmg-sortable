@@ -192,6 +192,17 @@ export class SortableDemo extends LitElement {
           })}
         </table>
       </exmg-sortable>
+
+      <h2>Manipulate sorted data</h2>
+      <exmg-sortable item-selector="div.box" on-dom-order-change="_usersOrderChange">
+        <div class="boxes">
+          <template is="dom-repeat" items="[[usersList]]" sort="_sortByIndex">
+            <div class="box">
+              [[item.firstName]] ([[item.index]])
+            </div>
+          </template>
+        </div>
+      </exmg-sortable>
     `;
   }
 }
