@@ -184,9 +184,9 @@ export class SortableElement extends LitElement {
           targetIndex,
         },
       }));
-    } else {
-      this.reset();
     }
+
+    this.reset();
   }
 
   /**
@@ -373,6 +373,7 @@ export class SortableElement extends LitElement {
   }
 
   render() {
+    console.log('render');
     return html`
       <style>
         :host {

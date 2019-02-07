@@ -136,7 +136,6 @@ export class SortableDemo extends LitElement {
 
       <h2>List</h2>
       <exmg-sortable
-        .items=${this.users}
         orientation="vertical"
         @dom-order-change="${this.orderChange}"
       >
@@ -155,7 +154,6 @@ export class SortableDemo extends LitElement {
 
       <h2>Cards</h2>
       <exmg-sortable
-        .items=${this.users}
         item-selector="div.box"
         @dom-order-change="${this.orderChange}"
       >
@@ -172,7 +170,6 @@ export class SortableDemo extends LitElement {
 
       <h2>Table with custom handle</h2>
       <exmg-sortable
-        .items=${this.users}
         item-selector="tr"
         handle-selector=".handle span"
         orientation="vertical"
@@ -194,7 +191,6 @@ export class SortableDemo extends LitElement {
 
       <h2>Manipulate sorted data</h2>
       <exmg-sortable
-        .items=${this.users}
         item-selector="div.box"
         @dom-order-change="${this.orderChange}"
       >
