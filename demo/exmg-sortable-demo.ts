@@ -137,7 +137,6 @@ export class SortableDemo extends LitElement {
       <h2>List</h2>
       <exmg-sortable
         .items=${this.users}
-        item-selector="li"
         orientation="vertical"
         @dom-order-change="${this.orderChange}"
       >
