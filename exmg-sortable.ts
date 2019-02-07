@@ -215,7 +215,7 @@ export class SortableElement extends LitElement {
     /* Work arround for issue with first element being party offscreen when drag start */
     this.dy = dy - (this.initialScrollTop - scrollTop);
 
-    console.log('trackMove', this.dx, this.dy);
+    // console.log('trackMove', this.dx, this.dy);
   }
 
   /**

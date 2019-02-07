@@ -40,10 +40,15 @@ export class SortableDemo extends LitElement {
    * Simple order update: splices the data array to change physical rendering order.
    */
   private orderChange(e: CustomEvent) {
+    console.log('e', e);
     setTimeout(() => {
       const {sourceIndex, targetIndex} = e.detail;
       const items = [...this.users];
-      items.splice(targetIndex, 0, items.splice(sourceIndex, 1)[0]);
+      items.splice(
+        targetIndex,
+        0,
+        items.splice(sourceIndex, 1)[0]
+      );
       this.users = items;
     }, 0);
   }
@@ -194,7 +199,10 @@ export class SortableDemo extends LitElement {
       </exmg-sortable>
 
       <h2>Manipulate sorted data</h2>
-      <exmg-sortable item-selector="div.box" on-dom-order-change="_usersOrderChange">
+      <exmg-sortable
+        item-selector="div.box"
+        on-dom-order-change="_usersOrderChange"
+      >
         <div class="boxes">
           <template is="dom-repeat" items="[[usersList]]" sort="_sortByIndex">
             <div class="box">
