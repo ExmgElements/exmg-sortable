@@ -158,7 +158,6 @@ export class SortableDemo extends LitElement {
       <h2>Cards</h2>
       <exmg-sortable
         .items=${this.users}
-        handle-selector="div.box"
         item-selector="div.box"
         @dom-order-change="${this.orderChange}"
       >
@@ -175,6 +174,7 @@ export class SortableDemo extends LitElement {
 
       <h2>Table</h2>
       <exmg-sortable
+        .items=${this.users}
         item-selector="tr"
         handle-selector=".handle span"
         @dom-order-change="${this.orderChange}"

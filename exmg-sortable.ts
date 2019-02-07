@@ -27,7 +27,7 @@ const orientationMap =  {
 export class SortableElement extends LitElement {
 
   @property({type: String, attribute: 'handle-selector'})
-  public handleSelector: string = 'li';
+  public handleSelector?: string;
 
   @property({type: String, attribute: 'item-selector'})
   public itemSelector: string = 'li';
