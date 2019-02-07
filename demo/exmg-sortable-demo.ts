@@ -138,6 +138,7 @@ export class SortableDemo extends LitElement {
       <exmg-sortable
         orientation="vertical"
         animation-enabled
+        animation-timing="{ &quot;duration&quot;: 200 }"
         @dom-order-change="${this.orderChange}"
       >
         <ul>
@@ -157,6 +158,7 @@ export class SortableDemo extends LitElement {
       <exmg-sortable
         item-selector="div.box"
         animation-enabled
+        animation-timing="{ &quot;duration&quot;: 500 }"
         @dom-order-change="${this.orderChange}"
       >
         <div class="boxes">
@@ -164,44 +166,6 @@ export class SortableDemo extends LitElement {
             return html`
               <div class="box">
                 ${user.firstName}
-              </div>
-            `;
-          })}
-        </div>
-      </exmg-sortable>
-
-      <h2>Table with custom handle</h2>
-      <exmg-sortable
-        item-selector="tr"
-        handle-selector=".handle span"
-        orientation="vertical"
-        @dom-order-change="${this.orderChange}"
-      >
-        <table>
-          ${this.users.map((user) => {
-            return html`
-              <tr>
-                <td class="handle"><span></span></td>
-                <td>${user.firstName}</td>
-                <td>${user.lastName}</td>
-                <td>${user.email}</td>
-              </tr>
-            `;
-          })}
-        </table>
-      </exmg-sortable>
-
-      <h2>Manipulate sorted data</h2>
-      <exmg-sortable
-        item-selector="div.box"
-        @dom-order-change="${this.orderChange}"
-      >
-        <div class="boxes">
-          ${this.users.map((user) => {
-            return html`
-              <div class="box">
-                ${user.firstName}<br>
-                Moves: ${user.amountOfMoves || 0}
               </div>
             `;
           })}

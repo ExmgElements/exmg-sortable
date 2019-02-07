@@ -60,22 +60,17 @@ export class SortableElement extends LitElement {
   private draggedElementOrigin?: HTMLElement;
   private sortableNodes: HTMLElement[] = [];
   private animatedElements: HTMLElement[] = [];
-  private dx: number | undefined;
-  private dy: number | undefined;
   private initialScrollTop: number = 0;
+  private animationPromise?: Promise<any>;
 
   constructor() {
     super();
 
     /* Save function references */
-    this.updatePointer = this.updatePointer.bind(this);
     this.handleTrack = this.handleTrack.bind(this);
 
     /* Set attribute property to default value */
     this.draggingDisabled = false;
-
-    /* Start request animation frame to handle mouse animations for dragging clone */
-    requestAnimationFrame(this.updatePointer);
   }
 
   public disconnectedCallback(): void {
@@ -97,37 +92,23 @@ export class SortableElement extends LitElement {
   private handleTrack(e:Event): void {
     switch ((<CustomEvent>e).detail.state) {
       case 'start':
+        this.dragRequestPending = true;
         this.trackStart(e);
         break;
       case 'track':
         this.trackMove(e);
         break;
       case 'end':
-        this.trackEnd();
+        this.dragRequestPending = false;
+        if (this.animationPromise) {
+          this.animationPromise.then(() => {
+            this.trackEnd();
+          });
+        } else {
+          this.trackEnd();
+        }
         break;
     }
-  }
-
-  /**
-   * Tracks a pointer from touchstart/mousedown to touchend/mouseup. Note that the start state is fired following
-   * the first actual move event following a touchstart/mousedown.
-   */
-  updatePointer(): void {
-    if (!this.draggedElement || !this.draggedElementClone) {
-      requestAnimationFrame(this.updatePointer);
-      return;
-    }
-
-    Object.assign(this.draggedElementClone.style, {
-      transform: `translate3d(${this.dx}px, ${this.dy}px, 0)`,
-    });
-
-    const target = this.hitTest(this.draggedElementClone, this.sortableNodes)[0];
-    if (target && (target !== this.draggedElement) && this.isAnimating(target) === false) {
-      this.insertAtTarget(this.draggedElement, target);
-    }
-
-    requestAnimationFrame(this.updatePointer);
   }
 
   /**
@@ -175,7 +156,6 @@ export class SortableElement extends LitElement {
     const targetIndex = updated.indexOf(this.draggedElement);
 
     if (sourceIndex !== targetIndex) {
-      this.dragRequestPending = true;
       this.dispatchEvent(new CustomEvent('dom-order-change', {
         bubbles: true,
         composed: true,
@@ -204,11 +184,24 @@ export class SortableElement extends LitElement {
       dy = dy * orientationMap[this.orientation].y;
     }
 
-    this.dx = dx;
-    /* Work arround for issue with first element being party offscreen when drag start */
-    this.dy = dy - (this.initialScrollTop - scrollTop);
+    /* Work around for issue with first element being party offscreen when drag start */
+    dy = dy - (this.initialScrollTop - scrollTop);
 
-    // console.log('trackMove', this.dx, this.dy);
+    Object.assign(this.draggedElementClone!.style, {
+      transform: `translate3d(${dx}px, ${dy}px, 0)`,
+    });
+
+    const target = this.hitTest(this.draggedElementClone!, this.sortableNodes)[0];
+    if (
+      // if clone intersects with a valid target,
+      target &&
+      // other than its own origin,
+      (target !== this.draggedElement) &&
+      // and the target isn't currently animating, which causes false hit tests,
+      this.isAnimating(target) === false
+    ) {
+      this.insertAtTarget(this.draggedElement!, target);
+    }
   }
 
   /**
@@ -280,18 +273,23 @@ export class SortableElement extends LitElement {
     });
 
     // animate from dx/dy (old node position) to none (new node position)
-    node.animate([
-      {transform: `translate3d(${dx}px, ${dy}px, 0)`},
-      {transform: 'none'},
-    ], this.animationTiming).addEventListener('finish', () => {
-      const index = this.animatedElements.indexOf(node);
-      Object.assign(node.style, {
-        willChange: 'initial',
+    this.animationPromise = new Promise((resolve) => {
+      node.animate([
+        {transform: `translate3d(${dx}px, ${dy}px, 0)`},
+        {transform: 'none'},
+      ], this.animationTiming).addEventListener('finish', () => {
+        const index = this.animatedElements.indexOf(node);
+        Object.assign(node.style, {
+          willChange: 'initial',
+        });
+        if (index !== -1) {
+          // splice out when done to unlock as a valid target
+          this.animatedElements.splice(index, 1);
+        }
+
+        resolve();
+        delete this.animationPromise;
       });
-      if (index !== -1) {
-        // splice out when done to unlock as a valid target
-        this.animatedElements.splice(index, 1);
-      }
     });
   }
 
@@ -342,8 +340,6 @@ export class SortableElement extends LitElement {
     const clone = <any>node.cloneNode(true);
 
     const {offsetLeft: x, offsetTop: y} = node;
-    this.dx = 0;
-    this.dy = 0;
 
     this.initialScrollTop = Math.max(window.pageYOffset, document.documentElement.scrollTop, document.body.scrollTop);
 
@@ -373,7 +369,6 @@ export class SortableElement extends LitElement {
   }
 
   render() {
-    console.log('render');
     return html`
       <style>
         :host {
