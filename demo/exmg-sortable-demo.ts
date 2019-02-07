@@ -8,27 +8,7 @@ export class SortableDemo extends LitElement {
   public dataUrl: string = '';
 
   @property({type: Array})
-  public users: any[] = [{
-    "index": 2,
-    "firstName": "Peter",
-    "lastName": "Neder",
-    "email": "peter@email.com"
-  },{
-    "index": 3,
-    "firstName": "Marloes",
-    "lastName": "Haut",
-    "email": "marloes@email.com"
-  },{
-    "index": 1,
-    "firstName": "Mark",
-    "lastName": "Smiths",
-    "email": "mark@email.com"
-  },{
-    "index": 4,
-    "firstName": "Peter-Paul",
-    "lastName": "Elf",
-    "email": "pp@email.com"
-  }];
+  public users: any[] = [];
 
   constructor() {
     super();
@@ -40,17 +20,22 @@ export class SortableDemo extends LitElement {
    * Simple order update: splices the data array to change physical rendering order.
    */
   private orderChange(e: CustomEvent) {
-    console.log('e', e);
     setTimeout(() => {
       const {sourceIndex, targetIndex} = e.detail;
       const items = [...this.users];
-      items.splice(
-        targetIndex,
-        0,
-        items.splice(sourceIndex, 1)[0]
-      );
+      const movedElement = items[sourceIndex];
+
+      movedElement.amountOfMoves = (movedElement.amountOfMoves || 0) + 1;
+
+      items.splice(sourceIndex, 1);
+      items.splice(targetIndex, 0, movedElement);
+
       this.users = items;
     }, 0);
+  }
+
+  private handleIronAjaxResponse(response: CustomEvent) {
+    this.users = response.detail.xhr.response;
   }
 
   render() {
@@ -140,6 +125,8 @@ export class SortableDemo extends LitElement {
 
       </style>
 
+      <iron-ajax auto="" url="data/users.json" handle-as="json" @response="${this.handleIronAjaxResponse}"></iron-ajax>
+
       <h2>List</h2>
       <exmg-sortable
         .items=${this.users}
@@ -200,17 +187,22 @@ export class SortableDemo extends LitElement {
 
       <h2>Manipulate sorted data</h2>
       <exmg-sortable
+        .items=${this.users}
         item-selector="div.box"
-        on-dom-order-change="_usersOrderChange"
+        @dom-order-change="${this.orderChange}"
       >
         <div class="boxes">
-          <template is="dom-repeat" items="[[usersList]]" sort="_sortByIndex">
-            <div class="box">
-              [[item.firstName]] ([[item.index]])
-            </div>
-          </template>
+          ${this.users.map((user) => {
+            return html`
+              <div class="box">
+                ${user.firstName}<br>
+                Moves: ${user.amountOfMoves || 0}
+              </div>
+            `;
+          })}
         </div>
       </exmg-sortable>
+
     `;
   }
 }
