@@ -85,23 +85,30 @@ export class SortableDemo extends LitElement {
       }
 
       tr.dragged {
-        background: #f0f0f0;
+        background: #c0c0c0;
+        opacity: 0.25;
+        box-shadow: 2px 2px 5px rgba(0,0,0,0.5) inset;
       }
 
       tr.clone {
-        opacity: 0;
+        background: white;
+        width: 100%;
+        box-sizing: border-box;
+        box-shadow: 2px 2px 5px rgba(0,0,0,0.5);
+        opacity: 0.9;
       }
 
       td.handle {
         padding: 0;
         vertical-align: middle;
       }
-        td.handle span {
-          display: block;
-          background: gray;
-          width: 20px;
-          height: 20px;
-        }
+      td.handle span {
+        display: block;
+        background: gray;
+        width: 20px;
+        height: 20px;
+        margin: 10px;
+      }
 
       .boxes {
           margin-top: 2em;
@@ -164,11 +171,12 @@ export class SortableDemo extends LitElement {
         </div>
       </exmg-sortable>
 
-      <h2>Table</h2>
+      <h2>Table with custom handle</h2>
       <exmg-sortable
         .items=${this.users}
         item-selector="tr"
         handle-selector=".handle span"
+        orientation="vertical"
         @dom-order-change="${this.orderChange}"
       >
         <table>
