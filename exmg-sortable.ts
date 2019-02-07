@@ -50,11 +50,7 @@ export class SortableElement extends LitElement {
   @property({type: String})
   public orientation?: 'horizontal'|'vertical';
 
-  @property({type: Boolean})
-  private isDraggable: boolean = true;
-
   private dragRequestPending: boolean = false;
-
   private draggedElement?: HTMLElement;
   private draggedElementClone?: HTMLElement;
   private draggedElementOrigin?: HTMLElement;
@@ -68,16 +64,18 @@ export class SortableElement extends LitElement {
 
     /* Save function references */
     this.handleTrack = this.handleTrack.bind(this);
-
-    /* Set attribute property to default value */
-    this.draggingDisabled = false;
   }
 
-  public disconnectedCallback(): void {
+  connectedCallback(): void {
+    super.connectedCallback();
+    addListener(this, 'track', this.handleTrack);
+  }
+
+  disconnectedCallback(): void {
     removeListener(this, 'track', this.handleTrack);
   }
 
-  public shouldUpdate(changedProperties: PropertyValues): boolean {
+  protected shouldUpdate(changedProperties: PropertyValues): boolean {
     /* restore dom before if items has changes */
     if (changedProperties && changedProperties.has('items') && this.dragRequestPending) {
       this.reset();
@@ -115,7 +113,7 @@ export class SortableElement extends LitElement {
    * Initialized a drag and drop sequence if a child node was clicked that matches the itemSelector property. If a
    * handleSelector is defined, a node matching this selector must be clicked instead.
    */
-  trackStart(e:Event) {
+  private trackStart(e:Event): void {
     const handle = this.handleSelector;
     const targetElement = (<any>e).path[0];
 
@@ -233,7 +231,7 @@ export class SortableElement extends LitElement {
     return this.animatedElements.indexOf(node) > -1;
   }
 
-  public reset() {
+  private reset(): void {
     if (this.draggedElementClone !== undefined && this.draggedElementClone.parentNode !== null) {
       this.draggedElementClone.parentNode.removeChild(this.draggedElementClone);
     }
@@ -246,7 +244,6 @@ export class SortableElement extends LitElement {
     delete this.draggedElementClone;
     delete this.draggedElement;
 
-    this.draggingDisabled = false;
     this.sortableNodes = [];
     this.animatedElements = [];
     this.dragRequestPending = false;
@@ -353,19 +350,6 @@ export class SortableElement extends LitElement {
     clone.classList.add(this.cloneClass);
 
     return node.parentNode!.appendChild(clone);
-  }
-
-  get draggingDisabled(): boolean {
-    return !this.isDraggable;
-  }
-
-  set draggingDisabled(draggingDisabled: boolean) {
-    if (draggingDisabled) {
-      removeListener(this, 'track', this.handleTrack);
-    } else {
-      addListener(this, 'track', this.handleTrack);
-    }
-    this.isDraggable = !draggingDisabled;
   }
 
   render() {
