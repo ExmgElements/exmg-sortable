@@ -50,15 +50,8 @@ export class SortableElement extends LitElement {
   @property({type: String})
   public orientation?: 'horizontal'|'vertical';
 
-  /**
-   * Toggle for enabling/disabling dragging
-   * @type {Boolean}
-   */
   @property({type: Boolean})
   private isDraggable: boolean = true;
-
-  // @property({type: Array})
-  // private cloneProperties: string[] = ['index', 'item'];
 
   private dragRequestPending: boolean = false;
 
@@ -347,9 +340,6 @@ export class SortableElement extends LitElement {
    */
   private createClone(node: HTMLElement): HTMLElement {
     const clone = <any>node.cloneNode(true);
-
-    /* Element properties will be lost on close so reattach */
-    // this.cloneProperties.forEach(cp => clone[cp] = (<any>node)[cp]);
 
     const {offsetLeft: x, offsetTop: y} = node;
     this.dx = 0;
