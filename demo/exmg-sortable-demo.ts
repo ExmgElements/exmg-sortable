@@ -210,7 +210,6 @@ export class SortableDemo extends LitElement {
           })}
         </div>
       </exmg-sortable>
-
     `;
   }
 }
