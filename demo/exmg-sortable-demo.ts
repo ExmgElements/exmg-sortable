@@ -137,6 +137,7 @@ export class SortableDemo extends LitElement {
       <h2>List</h2>
       <exmg-sortable
         orientation="vertical"
+        animation-enabled
         @dom-order-change="${this.orderChange}"
       >
         <ul>
@@ -155,6 +156,7 @@ export class SortableDemo extends LitElement {
       <h2>Cards</h2>
       <exmg-sortable
         item-selector="div.box"
+        animation-enabled
         @dom-order-change="${this.orderChange}"
       >
         <div class="boxes">
