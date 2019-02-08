@@ -1,5 +1,6 @@
-import {LitElement, html, customElement, property, PropertyValues} from 'lit-element';
+import {LitElement, html, customElement, property} from 'lit-element';
 import {addListener, removeListener} from '@polymer/polymer/lib/utils/gestures.js';
+import {afterNextRender} from '@polymer/polymer/lib/utils/render-status.js';
 
 /**
  * Orientation map to limit dragging to horizontal or vertical.
@@ -13,12 +14,16 @@ const orientationMap =  {
  * The `<exmg-sortable>` element Enables drag and drop sorting of nodes in a list, table or any other set of
  * elements.
  *
+ * !!! You should always handle @dom-order-change to update your local .items property to update sorted list properly
+ *
  * ```html
- * <exmg-sortable item-selector="li" on-dom-order-change="_myChangeHandler">
+ * <exmg-sortable item-selector="li" @dom-order-change="${this.myChangeHandler}">
  *  <ul>
- *    <template is="dom-repeat" items="[[foo]]">
- *      <li>[[item.bar]]</li>
- *    </template>
+ *     ${this.items.map((item) => {
+ *       return html`
+ *         <li>${item}</li>
+ *       `;
+ *     })}
  *  </ul>
  * </exmg-sortable>
  * ```
@@ -75,14 +80,6 @@ export class SortableElement extends LitElement {
     removeListener(this, 'track', this.handleTrack);
   }
 
-  protected shouldUpdate(changedProperties: PropertyValues): boolean {
-    /* restore dom before if items has changes */
-    if (changedProperties && changedProperties.has('items') && this.dragRequestPending) {
-      this.reset();
-    }
-    return true;
-  }
-
   /**
    * Tracks a pointer from touchstart/mousedown to touchend/mouseup. Note that the start state is fired following
    * the first actual move event following a touchstart/mousedown.
@@ -90,20 +87,21 @@ export class SortableElement extends LitElement {
   private handleTrack(e:Event): void {
     switch ((<CustomEvent>e).detail.state) {
       case 'start':
-        this.dragRequestPending = true;
-        this.trackStart(e);
+        if (!this.dragRequestPending) {
+          this.dragRequestPending = true;
+          this.trackStart(e);
+        }
         break;
       case 'track':
         this.trackMove(e);
         break;
       case 'end':
-        this.dragRequestPending = false;
         if (this.animationPromise) {
           this.animationPromise.then(() => {
-            this.trackEnd();
+            afterNextRender(this, this.trackEnd);
           });
         } else {
-          this.trackEnd();
+          afterNextRender(this, this.trackEnd);
         }
         break;
     }
@@ -165,6 +163,8 @@ export class SortableElement extends LitElement {
     }
 
     this.reset();
+
+    this.dragRequestPending = false;
   }
 
   /**
@@ -173,6 +173,10 @@ export class SortableElement extends LitElement {
    */
   private trackMove(e: Event): void {
     e.preventDefault();
+
+    if (!this.draggedElementClone) {
+      return;
+    }
 
     let {dx, dy} = (<any>e).detail;
     const scrollTop = Math.max(window.pageYOffset, document.documentElement.scrollTop, document.body.scrollTop);
