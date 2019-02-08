@@ -312,8 +312,11 @@ export class SortableElement extends LitElement {
       }));
     }
 
-    const insert = (node.compareDocumentPosition(target) & 4) ? target.nextSibling : target;
     if (node && node.parentNode) {
+      const insert =
+        (node.compareDocumentPosition(target) & this.DOCUMENT_POSITION_FOLLOWING) ?
+          target.nextSibling :
+          target;
       node.parentNode.insertBefore(node, insert);
     }
 
