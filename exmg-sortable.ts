@@ -113,7 +113,8 @@ export class SortableElement extends LitElement {
    */
   private trackStart(e:Event): void {
     const handle = this.handleSelector;
-    const targetElement = (<any>e).path[0];
+    const eventPath: EventTarget[] = (<any>e).path ? (<any>e).path : e.composedPath();
+    const targetElement = <HTMLElement>eventPath[0];
 
     /* Look for closest handle */
     if (handle && !targetElement.closest(handle)) {
@@ -121,7 +122,7 @@ export class SortableElement extends LitElement {
     }
 
     const selector = this.itemSelector;
-    const node = targetElement.closest(selector);
+    const node = <HTMLElement>targetElement.closest(selector);
 
     if (node) {
       e.preventDefault();
@@ -129,7 +130,7 @@ export class SortableElement extends LitElement {
       this.draggedElement = node;
       this.sortableNodes = Array.from(this.querySelectorAll(selector)) || [];
       this.draggedElementClone = this.createClone(node);
-      this.draggedElementOrigin = node.nextSibling;
+      this.draggedElementOrigin = <HTMLElement>node.nextSibling;
       this.animatedElements = [];
 
       this.draggedElement!.classList.add(this.draggedClass);
