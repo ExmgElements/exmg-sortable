@@ -52,7 +52,7 @@ export class SortableDemo extends LitElement {
         border-bottom: 1px solid silver;
       }
 
-      li.clone {
+      li.cloned {
         background: white;
         width: 100%;
         box-sizing: border-box;
@@ -90,7 +90,7 @@ export class SortableDemo extends LitElement {
         box-shadow: 2px 2px 5px rgba(0,0,0,0.5) inset;
       }
 
-      tr.clone {
+      tr.cloned {
         background: white;
         width: 100%;
         box-sizing: border-box;
