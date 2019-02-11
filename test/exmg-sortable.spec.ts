@@ -58,7 +58,7 @@ suite('<exmg-sortable>', function () {
       draggedElem.dispatchEvent(trackEndEvent);
 
       parent!.insertBefore(draggedElem, element.querySelectorAll('li')[2]);
-      parent!.removeChild(element.querySelector('li.clone')!);
+      parent!.removeChild(element.querySelector('li.cloned')!);
     });
   });
 
