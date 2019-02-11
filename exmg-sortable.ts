@@ -43,10 +43,10 @@ export class SortableElement extends LitElement {
   @property({type: Boolean, attribute: 'animation-enabled'})
   public animationEnabled: boolean = false;
 
-  @property({type: String, attribute: 'clone-class'})
-  public cloneClass: string = 'clone';
+  @property({type: String, attribute: 'cloned-class'})
+  public clonedClass: string = 'cloned';
 
-  @property({type: String})
+  @property({type: String, attribute: 'dragged-class'})
   public draggedClass: string = 'dragged';
 
   @property({type: Object, attribute: 'animation-timing'})
@@ -354,7 +354,7 @@ export class SortableElement extends LitElement {
       willChange: 'transform,opacity',
     });
 
-    clone.classList.add(this.cloneClass);
+    clone.classList.add(this.clonedClass);
 
     return node.parentNode!.appendChild(clone);
   }
