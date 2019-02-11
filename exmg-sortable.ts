@@ -343,6 +343,15 @@ export class SortableElement extends LitElement {
   private createClone(node: HTMLElement): HTMLElement {
     const clone = <any>node.cloneNode(true);
 
+    /**
+     * We have to copy all user defined properties manually.
+     * Lit element prefixes custom properties with '__' so that's why we check for it.
+     */
+    Object
+      .keys(node)
+      .filter(prop => prop.startsWith('__'))
+      .forEach(prop => clone[prop] = (<any>node)[prop]);
+
     const {offsetLeft: x, offsetTop: y} = node;
 
     this.initialScrollTop = Math.max(window.pageYOffset, document.documentElement.scrollTop, document.body.scrollTop);
