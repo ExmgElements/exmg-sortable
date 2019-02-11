@@ -10,7 +10,7 @@ install:
   - npm i polymer-cli
 
 before_script:
-  - tslint -c ./tslint.json --project ./
+  - npm run build
 
 addons:
   firefox: latest
