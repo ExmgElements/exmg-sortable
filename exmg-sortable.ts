@@ -88,7 +88,6 @@ export class SortableElement extends LitElement {
     switch ((<CustomEvent>e).detail.state) {
       case 'start':
         if (!this.dragRequestPending) {
-          this.dragRequestPending = true;
           this.trackStart(e);
         }
         break;
@@ -120,6 +119,8 @@ export class SortableElement extends LitElement {
     if (handle && !targetElement.closest(handle)) {
       return;
     }
+
+    this.dragRequestPending = true;
 
     const selector = this.itemSelector;
     const node = <HTMLElement>targetElement.closest(selector);
