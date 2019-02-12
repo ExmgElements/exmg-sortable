@@ -203,7 +203,7 @@ export class SortableElement extends LitElement {
       // other than its own origin,
       (target !== this.draggedElement) &&
       // and the target isn't currently animating, which causes false hit tests,
-      this.isAnimating(target) === false
+      !this.isAnimating(target)
     ) {
       this.insertAtTarget(this.draggedElement!, target);
     }
@@ -235,7 +235,7 @@ export class SortableElement extends LitElement {
    * @returns {boolean} isAnimating
    */
   private isAnimating(node: HTMLElement): boolean {
-    return this.animatedElements.indexOf(node) > -1;
+    return this.animatedElements.indexOf(node) !== -1;
   }
 
   private reset(): void {
