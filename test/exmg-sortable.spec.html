@@ -27,6 +27,30 @@
         </exmg-sortable>
     </template>
 </test-fixture>
+<test-fixture id="ExmgSortableListWithCustomHandle">
+    <template>
+        <exmg-sortable
+            orientation="vertical"
+            item-selector="tr"
+            handle-selector=".handle span"
+        >
+            <table>
+                <tr>
+                    <td class="handle"><span></span></td>
+                    <td>Rubin</td>
+                </tr>
+                <tr>
+                    <td class="handle"><span></span></td>
+                    <td>Gennie</td>
+                </tr>
+                <tr>
+                    <td class="handle"><span></span></td>
+                    <td>Ronna</td>
+                </tr>
+            </table>
+        </exmg-sortable>
+    </template>
+</test-fixture>
 <script type="module" src="exmg-sortable.spec.js"></script>
 </body>
 </html>
