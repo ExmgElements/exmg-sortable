@@ -117,7 +117,11 @@ export class SortableElement extends LitElement {
       return;
     }
 
+    /**
+     * Firefox bug fix: when dragging elements in firefox, closest text also getting selected
+     */
     this.style.webkitUserSelect = 'none';
+
     this.dragRequestPending = true;
 
     const selector = this.itemSelector;
