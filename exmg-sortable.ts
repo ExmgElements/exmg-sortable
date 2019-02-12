@@ -120,6 +120,7 @@ export class SortableElement extends LitElement {
       return;
     }
 
+    this.style.webkitUserSelect = 'none';
     this.dragRequestPending = true;
 
     const selector = this.itemSelector;
@@ -167,6 +168,7 @@ export class SortableElement extends LitElement {
     this.reset();
 
     this.dragRequestPending = false;
+    this.style.webkitUserSelect = 'text';
   }
 
   /**
@@ -253,6 +255,7 @@ export class SortableElement extends LitElement {
     this.sortableNodes = [];
     this.animatedElements = [];
     this.dragRequestPending = false;
+    this.style.webkitUserSelect = 'text';
   }
 
   /**
