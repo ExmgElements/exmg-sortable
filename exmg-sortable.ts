@@ -37,9 +37,6 @@ export class SortableElement extends LitElement {
   @property({type: String, attribute: 'item-selector'})
   public itemSelector: string = 'li';
 
-  @property({type: Array})
-  public items?: any[];
-
   @property({type: Boolean, attribute: 'animation-enabled'})
   public animationEnabled: boolean = false;
 
@@ -140,9 +137,7 @@ export class SortableElement extends LitElement {
   }
 
   /**
-   * Ends the drag and drop sequence and updates the new node order to the instance's items for binding and
-   * rendering purposes.
-   *
+   * Ends the drag and drop sequence.
    */
   private trackEnd(): void {
     if (!this.draggedElement) {
@@ -346,7 +341,20 @@ export class SortableElement extends LitElement {
    * @return {Node} clone
    */
   private createClone(node: HTMLElement): HTMLElement {
-    const clone = <any>node.cloneNode(true);
+    const clone = <HTMLElement>node.cloneNode(true);
+
+    /**
+     * Bugfix for table row sorting.
+     * During dragging table rows shrink, so we manually set them width of original node.
+     */
+    Array.from(clone.children).forEach((nodeChild: Element, index) => {
+      const clonedNodeChild = (<HTMLElement>nodeChild);
+      const originalNodeChild = (<HTMLElement>node.children.item(index));
+
+      if (originalNodeChild) {
+        clonedNodeChild.style.width = `${originalNodeChild.offsetWidth}px`;
+      }
+    });
 
     /**
      * We have to copy all user defined properties manually.
@@ -355,7 +363,7 @@ export class SortableElement extends LitElement {
     Object
       .keys(node)
       .filter(prop => prop.startsWith('__'))
-      .forEach(prop => clone[prop] = (<any>node)[prop]);
+      .forEach(prop => (<any>clone)[prop] = (<any>node)[prop]);
 
     const {offsetLeft: x, offsetTop: y} = node;
 
