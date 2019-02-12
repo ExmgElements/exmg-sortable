@@ -59,7 +59,7 @@ export class SortableElement extends LitElement {
   private sortableNodes: HTMLElement[] = [];
   private animatedElements: HTMLElement[] = [];
   private initialScrollTop: number = 0;
-  private animationPromise?: Promise<any>;
+  private animationPromise?: Promise<void>;
 
   constructor() {
     super();
