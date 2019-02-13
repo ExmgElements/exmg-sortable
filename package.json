@@ -10,7 +10,7 @@
     "polymer",
     "sortable"
   ],
-  "main": "index.html",
+  "main": "exmg-sortable.js",
   "files": [
     "exmg-*.js",
     "exmg-*.d.ts"
