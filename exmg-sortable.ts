@@ -117,10 +117,7 @@ export class SortableElement extends LitElement {
       return;
     }
 
-    /**
-     * Firefox bug fix: when dragging elements in firefox, closest text also getting selected
-     */
-    this.style.webkitUserSelect = 'none';
+    this.updateUserSelectStyle('none');
 
     this.dragRequestPending = true;
 
@@ -167,7 +164,7 @@ export class SortableElement extends LitElement {
     this.reset();
 
     this.dragRequestPending = false;
-    this.style.webkitUserSelect = 'text';
+    this.updateUserSelectStyle('text');
   }
 
   /**
@@ -207,6 +204,16 @@ export class SortableElement extends LitElement {
     ) {
       this.insertAtTarget(this.draggedElement!, target);
     }
+  }
+
+  private updateUserSelectStyle(userSelect: 'text'|'none'): void {
+    /**
+     * Firefox bug fix: when dragging elements in firefox, closest text also getting selected
+     */
+    this.style.userSelect = userSelect;
+    (<any>this.style).MozUserSelect = userSelect;
+    this.style.msUserSelect = userSelect;
+    this.style.webkitUserSelect = userSelect;
   }
 
   /**
@@ -254,7 +261,7 @@ export class SortableElement extends LitElement {
     this.sortableNodes = [];
     this.animatedElements = [];
     this.dragRequestPending = false;
-    this.style.webkitUserSelect = 'text';
+    this.updateUserSelectStyle('text');
   }
 
   /**
