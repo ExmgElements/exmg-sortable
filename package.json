@@ -57,5 +57,8 @@
     "test-dev": "polymer test --npm -l chrome -p",
     "test": "polymer test --npm --expanded",
     "test:integration": "polymer build # test that psk builds without error with the CLI"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }
