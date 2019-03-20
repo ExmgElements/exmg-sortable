@@ -1,4 +1,4 @@
-import {LitElement, html, customElement, property} from 'lit-element';
+import {LitElement, html, customElement, property, PropertyValues} from 'lit-element';
 import {addListener, removeListener} from '@polymer/polymer/lib/utils/gestures.js';
 import {afterNextRender} from '@polymer/polymer/lib/utils/render-status.js';
 
@@ -37,6 +37,14 @@ export class SortableElement extends LitElement {
   @property({type: String, attribute: 'item-selector'})
   public itemSelector: string = 'li';
 
+  /**
+   * Optionally is possible to pass node instance which is host of sortable elements otherwise host for sortable elements
+   * is `exmg-sortable` itself.
+   * Note that style `sortableHostNode.style.position` will be set to `relative`
+   */
+  @property({type: Object})
+  public sortableHostNode?: HTMLElement;
+
   @property({type: Boolean, attribute: 'animation-enabled'})
   public animationEnabled: boolean = false;
 
@@ -70,11 +78,36 @@ export class SortableElement extends LitElement {
 
   connectedCallback(): void {
     super.connectedCallback();
-    addListener(this, 'track', this.handleTrack);
+    addListener(this.getSortableHost(), 'track', this.handleTrack);
   }
 
   disconnectedCallback(): void {
-    removeListener(this, 'track', this.handleTrack);
+    removeListener(this.getSortableHost(), 'track', this.handleTrack);
+  }
+
+  protected updated(changedProperties: PropertyValues): void {
+    if (changedProperties.has('sortableHostNode')) {
+      // reset listeners when sortableHostNode changed
+      removeListener(<HTMLElement>changedProperties.get('sortableHostNode') || this, 'track', this.handleTrack);
+      addListener(this.getSortableHost(), 'track', this.handleTrack);
+
+      if (this.sortableHostNode) {
+        // sortable host must have position relative
+        this.sortableHostNode.style.position = 'relative';
+      }
+    }
+  }
+
+  /**
+   * Get instance of sortable host.
+   * By default it is `exmg-sortable` which can be overridden by property `sortableHostNode`
+   */
+  private getSortableHost(): HTMLElement {
+    if (this.sortableHostNode) {
+      return this.sortableHostNode;
+    }
+
+    return this;
   }
 
   /**
@@ -128,7 +161,7 @@ export class SortableElement extends LitElement {
       e.preventDefault();
 
       this.draggedElement = node;
-      this.sortableNodes = Array.from(this.querySelectorAll(selector)) || [];
+      this.sortableNodes = Array.from(this.getSortableHost().querySelectorAll(selector)) || [];
       this.draggedElementClone = this.createClone(node);
       this.draggedElementOrigin = <HTMLElement>node.nextSibling;
       this.animatedElements = [];
@@ -145,7 +178,7 @@ export class SortableElement extends LitElement {
       return;
     }
 
-    const updated = Array.from(this.querySelectorAll(this.itemSelector));
+    const updated = Array.from(this.getSortableHost().querySelectorAll(this.itemSelector));
 
     const sourceIndex = this.sortableNodes.indexOf(this.draggedElement);
     const targetIndex = updated.indexOf(this.draggedElement);
