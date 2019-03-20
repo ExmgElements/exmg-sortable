@@ -10,6 +10,16 @@ export class SortableDemo extends LitElement {
   @property({type: Array})
   public users: any[] = [];
 
+  @property({type: Object})
+  private externalSortableHost?: HTMLElement;
+
+  protected async firstUpdated(): Promise<void> {
+    await this.updateComplete;
+    setTimeout(() => {
+      this.externalSortableHost = this.shadowRoot!.querySelector<HTMLElement>('#externalSortableHost')!;
+    });
+  }
+
   constructor() {
     super();
 
@@ -191,6 +201,27 @@ export class SortableDemo extends LitElement {
           })}
         </table>
       </exmg-sortable>
+
+      <h2>Table with custom handle and external sortable node host</h2>
+      <table id="externalSortableHost">
+        ${this.users.map((user) => {
+          return html`
+            <tr>
+              <td class="handle"><span></span></td>
+              <td>${user.firstName}</td>
+              <td>${user.lastName}</td>
+              <td>${user.email}</td>
+            </tr>
+            `;
+        })}
+      </table>
+      <exmg-sortable
+        item-selector="tr"
+        handle-selector=".handle span"
+        orientation="vertical"
+        @dom-order-change="${this.orderChange}"
+        .sortableHostNode="${this.externalSortableHost}"
+      ></exmg-sortable>
 
       <h2>Manipulate sorted data</h2>
       <exmg-sortable

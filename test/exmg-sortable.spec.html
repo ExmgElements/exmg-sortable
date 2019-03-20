@@ -51,6 +51,33 @@
         </exmg-sortable>
     </template>
 </test-fixture>
+<test-fixture id="ExmgSortableExternalHost">
+  <template>
+    <table>
+      <tr>
+        <td class="handle"><span></span></td>
+        <td>Rubin</td>
+      </tr>
+      <tr>
+        <td class="handle"><span></span></td>
+        <td>Gennie</td>
+      </tr>
+      <tr>
+        <td class="handle"><span></span></td>
+        <td>Ronna</td>
+      </tr>
+    </table>
+  </template>
+</test-fixture>
+<test-fixture id="ExmgSortableListWithExternalHost">
+  <template>
+    <exmg-sortable
+      orientation="vertical"
+      item-selector="tr"
+      handle-selector=".handle span"
+    ></exmg-sortable>
+  </template>
+</test-fixture>
 <script type="module" src="exmg-sortable.spec.js"></script>
 </body>
 </html>
